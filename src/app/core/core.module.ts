@@ -2,10 +2,10 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 
-import { CartService } from './services/cart.service';
-import { WhatsAppService } from './services/whatsapp.service';
-import { IAService } from './services/ia.service';
-import { StorageService } from './services/storage.service';
+import { CartService } from './services/cart';
+import { WhatsAppService } from './services/whatsapp';
+import { IAService } from './services/ia';
+import { Storage } from './services/storage';
 
 @NgModule({
   declarations: [],
@@ -17,7 +17,7 @@ import { StorageService } from './services/storage.service';
     CartService,
     WhatsAppService,
     IAService,
-    StorageService
+    Storage
   ],
   exports: []
 })
@@ -29,7 +29,7 @@ export class CoreModule {
         CartService,
         WhatsAppService,
         IAService,
-        StorageService
+        Storage
       ]
     };
   }

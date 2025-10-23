@@ -1,0 +1,48 @@
+<header class="header">
+  <div class="header-container">
+    <!-- Logo -->
+    <div class="logo">
+      <a href="#home" class="logo-link">
+        <span class="logo-text">Lushka</span>
+      </a>
+    </div>
+
+    <!-- Navigation and Cart Container -->
+    <div class="nav-cart-container">
+      <!-- Navigation -->
+      <nav class="nav-bar">
+        <ul class="nav-list">
+          <li class="nav-item" data-section="lushkai">
+            <a href="#lushkai" class="nav-link">LushkAI</a>
+          </li>
+          <li class="nav-item" data-section="catalog">
+            <a routerLink="/catalog" routerLinkActive="active" class="nav-link">Catálogo</a>
+          </li>
+          <li class="nav-item" data-section="combos">
+            <a href="#combos" class="nav-link">Combos</a>
+          </li>
+          <li class="nav-item" data-section="contact">
+            <a href="#contact" class="nav-link">Contacto</a>
+          </li>
+        </ul>
+      </nav>
+
+      <!-- Cart Icon -->
+      <div class="cart-section">
+        <a href="#cart" class="cart-link">
+          <div class="cart-icon">
+            🛒
+            @if (cartCount > 0) {
+              <span class="cart-count">{{ cartCount }}</span>
+            }
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scroll Indicator Line -->
+  <div class="scroll-indicator">
+    <div class="indicator-line" id="sectionIndicator"></div>
+  </div>
+</header>
