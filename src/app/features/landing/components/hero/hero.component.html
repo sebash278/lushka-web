@@ -1,0 +1,36 @@
+<section class="hero" id="home">
+  <div class="hero-container">
+    <!-- Carousel Slides -->
+    <div class="carousel-container">
+      @for (slide of heroSlides; track slide; let index = $index) {
+        <div class="slide" [class.active]="index === currentSlide">
+          <div class="hero-content">
+            <h1 class="hero-title">{{ slide.phrase }}</h1>
+            <p class="hero-subtitle">{{ slide.subtext }}</p>
+            <a routerLink="/catalog" class="cta-button">Ir al catálogo</a>
+          </div>
+        </div>
+      }
+    </div>
+
+    <!-- Carousel Controls -->
+    <button class="carousel-control prev" (click)="previousSlide()" aria-label="Previous slide">
+      ‹
+    </button>
+    <button class="carousel-control next" (click)="nextSlide()" aria-label="Next slide">
+      ›
+    </button>
+
+    <!-- Carousel Indicators -->
+    <div class="carousel-indicators">
+      @for (slide of heroSlides; track slide; let index = $index) {
+        <button
+          class="indicator"
+          [class.active]="index === currentSlide"
+          (click)="goToSlide(index)"
+          aria-label="Go to slide {{ index + 1 }}"
+        ></button>
+      }
+    </div>
+  </div>
+</section>

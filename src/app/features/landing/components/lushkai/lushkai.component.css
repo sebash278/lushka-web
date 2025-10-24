@@ -1,0 +1,456 @@
+.lushkai-section {
+  width: 100%;
+  background: #F6A1B0; /* Secondary background from your palette */
+  padding: 6rem 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.lushkai-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, #F6A1B0 0%, #F8B4C1 100%);
+  opacity: 0.9;
+  z-index: 1;
+}
+
+.lushkai-container {
+  max-width: 800px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+}
+
+.lushkai-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.lushkai-title {
+  font-size: 3rem;
+  font-weight: bold;
+  color: #9A1F3A;
+  margin-bottom: 1rem;
+  font-family: 'Lisu Bosa', serif;
+  text-shadow: 2px 2px 4px rgba(154, 31, 58, 0.1);
+}
+
+.lushkai-subtitle {
+  font-size: 1.3rem;
+  color: #761732;
+  font-family: 'Alegreya Sans', sans-serif;
+  font-weight: 500;
+}
+
+/* Loading State */
+.loading-state {
+  text-align: center;
+  padding: 4rem 2rem;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(154, 31, 58, 0.1);
+}
+
+.loading-spinner {
+  width: 50px;
+  height: 50px;
+  border: 4px solid rgba(154, 31, 58, 0.1);
+  border-top: 4px solid #9A1F3A;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 1.5rem;
+}
+
+.loading-text {
+  font-size: 1.2rem;
+  color: #761732;
+  font-family: 'Alegreya Sans', sans-serif;
+}
+
+/* Questionnaire */
+.questionnaire {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 20px;
+  padding: 3rem;
+  box-shadow: 0 10px 30px rgba(154, 31, 58, 0.1);
+}
+
+.progress-container {
+  margin-bottom: 2.5rem;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 8px;
+  background: rgba(154, 31, 58, 0.1);
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 0.5rem;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #9A1F3A, #EF326A);
+  border-radius: 10px;
+  transition: width 0.3s ease;
+}
+
+.progress-text {
+  font-size: 0.9rem;
+  color: #761732;
+  font-family: 'Alegreya Sans', sans-serif;
+  font-weight: 600;
+}
+
+.question-container {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.question {
+  font-size: 1.8rem;
+  color: #9A1F3A;
+  margin-bottom: 2.5rem;
+  font-family: 'Lisu Bosa', serif;
+  line-height: 1.4;
+}
+
+.options-container {
+  display: grid;
+  gap: 1rem;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.option-button {
+  padding: 1.2rem 1.5rem;
+  background: white;
+  border: 2px solid rgba(154, 31, 58, 0.2);
+  border-radius: 15px;
+  font-size: 1.1rem;
+  color: #761732;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'Alegreya Sans', sans-serif;
+  font-weight: 500;
+}
+
+.option-button:hover {
+  border-color: #9A1F3A;
+  background: rgba(154, 31, 58, 0.05);
+  transform: translateY(-2px);
+}
+
+.option-button.selected {
+  background: #9A1F3A;
+  color: white;
+  border-color: #9A1F3A;
+  box-shadow: 0 4px 15px rgba(154, 31, 58, 0.3);
+}
+
+.navigation {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.nav-button {
+  padding: 1rem 2rem;
+  border: none;
+  border-radius: 25px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'Alegreya Sans', sans-serif;
+}
+
+.nav-button.back {
+  background: transparent;
+  color: #9A1F3A;
+  border: 2px solid #9A1F3A;
+}
+
+.nav-button.back:hover {
+  background: #9A1F3A;
+  color: white;
+}
+
+.nav-button.next {
+  background: #EF326A;
+  color: white;
+  margin-left: auto;
+}
+
+.nav-button.next:hover:not(.disabled) {
+  background: #E91E63;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(239, 50, 106, 0.4);
+}
+
+.nav-button.disabled {
+  background: #ccc;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* Recommendations */
+.recommendation {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 20px;
+  padding: 3rem;
+  box-shadow: 0 10px 30px rgba(154, 31, 58, 0.1);
+}
+
+.recommendation-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.recommendation-title {
+  font-size: 2.2rem;
+  color: #9A1F3A;
+  margin-bottom: 1rem;
+  font-family: 'Lisu Bosa', serif;
+}
+
+.recommendation-subtitle {
+  font-size: 1.2rem;
+  color: #761732;
+  margin-bottom: 1.5rem;
+  font-family: 'Alegreya Sans', sans-serif;
+  line-height: 1.6;
+}
+
+.confidence-badge {
+  display: inline-block;
+  background: linear-gradient(135deg, #9A1F3A, #EF326A);
+  color: white;
+  padding: 0.5rem 1.5rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  font-family: 'Alegreya Sans', sans-serif;
+}
+
+.section-title {
+  font-size: 1.5rem;
+  color: #9A1F3A;
+  margin-bottom: 2rem;
+  font-family: 'Lisu Bosa', serif;
+  text-align: center;
+}
+
+.products-grid,
+.combos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+.product-card,
+.combo-card {
+  background: white;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 5px 20px rgba(154, 31, 58, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.product-card:hover,
+.combo-card:hover {
+  transform: translateY(-5px);
+}
+
+.product-image,
+.combo-image {
+  width: 100%;
+  height: 200px;
+  background: linear-gradient(135deg, #f8f8f8, #e8e8e8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.product-image img,
+.combo-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.combo-badge {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: #EF326A;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  font-family: 'Alegreya Sans', sans-serif;
+}
+
+.product-info,
+.combo-info {
+  padding: 1.5rem;
+}
+
+.product-name,
+.combo-name {
+  font-size: 1.2rem;
+  color: #9A1F3A;
+  margin-bottom: 0.5rem;
+  font-family: 'Lisu Bosa', serif;
+  font-weight: 600;
+}
+
+.product-description,
+.combo-description {
+  color: #761732;
+  margin-bottom: 1rem;
+  font-family: 'Alegreya Sans', sans-serif;
+  line-height: 1.5;
+}
+
+.product-price {
+  font-size: 1.3rem;
+  color: #9A1F3A;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  font-family: 'Alegreya Sans', sans-serif;
+}
+
+.combo-price {
+  margin-bottom: 1rem;
+}
+
+.current-price {
+  font-size: 1.3rem;
+  color: #9A1F3A;
+  font-weight: bold;
+  font-family: 'Alegreya Sans', sans-serif;
+}
+
+.original-price {
+  font-size: 1rem;
+  color: #999;
+  text-decoration: line-through;
+  margin-left: 0.5rem;
+  font-family: 'Alegreya Sans', sans-serif;
+}
+
+.add-to-cart {
+  width: 100%;
+  padding: 0.8rem;
+  background: #EF326A;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'Alegreya Sans', sans-serif;
+}
+
+.add-to-cart:hover {
+  background: #E91E63;
+  transform: translateY(-2px);
+}
+
+.recommendation-actions {
+  text-align: center;
+  margin-top: 3rem;
+}
+
+.reset-button {
+  padding: 1rem 2rem;
+  background: transparent;
+  color: #9A1F3A;
+  border: 2px solid #9A1F3A;
+  border-radius: 25px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'Alegreya Sans', sans-serif;
+}
+
+.reset-button:hover {
+  background: #9A1F3A;
+  color: white;
+}
+
+/* Animations */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .lushkai-section {
+    padding: 4rem 1rem;
+  }
+
+  .lushkai-title {
+    font-size: 2.2rem;
+  }
+
+  .lushkai-subtitle {
+    font-size: 1.1rem;
+  }
+
+  .questionnaire,
+  .recommendation {
+    padding: 2rem 1.5rem;
+  }
+
+  .question {
+    font-size: 1.4rem;
+  }
+
+  .option-button {
+    padding: 1rem 1.2rem;
+    font-size: 1rem;
+  }
+
+  .navigation {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .nav-button.next {
+    width: 100%;
+  }
+
+  .products-grid,
+  .combos-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .lushkai-title {
+    font-size: 1.8rem;
+  }
+
+  .questionnaire,
+  .recommendation {
+    padding: 1.5rem 1rem;
+  }
+
+  .option-button {
+    padding: 0.8rem 1rem;
+    font-size: 0.9rem;
+  }
+}

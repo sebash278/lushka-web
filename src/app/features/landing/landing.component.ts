@@ -1,10 +1,15 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { HeroComponent } from './components/hero/hero.component';
+import { LushkaiComponent } from './components/lushkai/lushkai.component';
+import { CompanyBannerComponent } from './components/company-banner/company-banner.component';
+import { CatalogPreviewComponent } from './components/catalog-preview/catalog-preview.component';
+import { CombosComponent } from './components/combos/combos.component';
 
 @Component({
   selector: 'app-landing',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, HeroComponent, LushkaiComponent, CompanyBannerComponent, CatalogPreviewComponent, CombosComponent],
   templateUrl: './landing.component.html',
   styleUrls: ['./landing.component.css']
 })

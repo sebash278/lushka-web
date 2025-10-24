@@ -1,7 +1,10 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { AIQuestion, AIOption, UserAnswer, AIRecommendation, AIState } from '../../shared/models';
-import { Product, Combo } from '../../shared/models';
+import { Product, Combo, ComboProduct } from '../../shared/models';
+import { ProductService } from '../../shared/services/product.service';
+import { ComboService } from '../../shared/services/combo.service';
+import { GeminiAiService } from './gemini-ai.service';
 
 @Injectable({
   providedIn: 'root'
@@ -16,6 +19,14 @@ export class IAService {
   });
 
   public aiState$ = this.aiStateSubject.asObservable();
+
+  constructor(
+    private productService: ProductService,
+    private comboService: ComboService,
+    private geminiAiService: GeminiAiService
+  ) {
+    this.initializeAI();
+  }
 
   // Preguntas predefinidas del cuestionario para productos de belleza
   private readonly questions: AIQuestion[] = [
@@ -81,10 +92,7 @@ export class IAService {
     }
   ];
 
-  constructor() {
-    this.initializeAI();
-  }
-
+  
   /**
    * Inicializar el sistema de IA
    */
@@ -193,7 +201,7 @@ export class IAService {
   }
 
   /**
-   * Generar recomendación basada en las respuestas
+   * Generar recomendación basada en las respuestas usando IA real
    */
   private generateRecommendation(answers: UserAnswer[]): void {
     // Indicar que se está cargando
@@ -202,20 +210,35 @@ export class IAService {
       isLoading: true
     });
 
-    // Simular tiempo de procesamiento
-    setTimeout(() => {
-      const recommendation = this.createRecommendation(answers);
+    // Usar IA real de Gemini
+    this.geminiAiService.generateRecommendation(answers).subscribe({
+      next: (recommendation) => {
+        const finalState: AIState = {
+          currentQuestion: null,
+          answers,
+          recommendation,
+          isCompleted: true,
+          isLoading: false
+        };
 
-      const finalState: AIState = {
-        currentQuestion: null,
-        answers,
-        recommendation,
-        isCompleted: true,
-        isLoading: false
-      };
+        this.aiStateSubject.next(finalState);
+      },
+      error: (error) => {
+        console.error('Error en generación de recomendación:', error);
+        // Fallback a recomendación simulada
+        const fallbackRecommendation = this.createRecommendation(answers);
 
-      this.aiStateSubject.next(finalState);
-    }, 1500); // Simular 1.5 segundos de procesamiento
+        const finalState: AIState = {
+          currentQuestion: null,
+          answers,
+          recommendation: fallbackRecommendation,
+          isCompleted: true,
+          isLoading: false
+        };
+
+        this.aiStateSubject.next(finalState);
+      }
+    });
   }
 
   /**
@@ -239,138 +262,145 @@ export class IAService {
    * Obtener recomendaciones de productos basadas en las respuestas
    */
   private getProductRecommendations(answers: UserAnswer[]): { products: Product[], combos: Combo[] } {
-    // Lógica simplificada - en producción esto podría conectar a un backend con ML
     const productType = answers.find(a => a.questionId === 'q1')?.value;
     const budget = answers.find(a => a.questionId === 'q2')?.value;
     const concern = answers.find(a => a.questionId === 'q3')?.value;
     const skinType = answers.find(a => a.questionId === 'q4')?.value;
     const ingredientType = answers.find(a => a.questionId === 'q5')?.value;
 
-    // Productos recomendados (simulados)
-    const products: Product[] = [];
-    const combos: Combo[] = [];
+    // Obtener productos del servicio centralizado
+    const allProducts = this.productService.getAllProducts();
+    let recommendedProducts = this.filterProductsByAnswers(allProducts, answers);
 
-    // Ejemplo de productos skincare basados en respuestas
-    if (productType === 'skincare' && budget === 'budget-medium') {
-      products.push(
-        {
-          id: 'skincare1',
-          name: 'Sérum Hidratante de Ácido Hialurónico',
-          description: 'Hidratación profunda para piel normal a seca',
-          price: 85000,
-          images: ['serum1.jpg'],
-          category: 'skincare',
-          tags: ['hydration', 'serum', 'hyaluronic-acid'],
-          stock: 25,
-          featured: true,
-          sku: 'SK-HA-SERUM-30',
-          createdAt: new Date(),
-          updatedAt: new Date()
-        }
-      );
+    // Limitar a máximo 4 productos recomendados
+    recommendedProducts = recommendedProducts.slice(0, 4);
+
+    // Generar combos (simulados por ahora, ya que no tenemos un servicio de combos)
+    const combos = this.generateCombos(productType, recommendedProducts);
+
+    return { products: recommendedProducts, combos };
+  }
+
+  /**
+   * Filtrar productos basados en las respuestas del cuestionario
+   */
+  private filterProductsByAnswers(products: Product[], answers: UserAnswer[]): Product[] {
+    const productType = answers.find(a => a.questionId === 'q1')?.value;
+    const budget = answers.find(a => a.questionId === 'q2')?.value;
+    const concern = answers.find(a => a.questionId === 'q3')?.value;
+    const skinType = answers.find(a => a.questionId === 'q4')?.value;
+    const ingredientType = answers.find(a => a.questionId === 'q5')?.value;
+
+    let filteredProducts = [...products];
+
+    // Filtrar por tipo de producto
+    if (productType) {
+      const categoryMap: { [key: string]: string[] } = {
+        'skincare': ['Facial'],
+        'makeup': ['Maquillaje'],
+        'haircare': ['Cabello'],
+        'bodycare': ['Corporal'],
+        'labios': ['Labios']
+      };
+
+      const relevantCategories = categoryMap[productType] || [];
+      if (relevantCategories.length > 0) {
+        filteredProducts = filteredProducts.filter(p => relevantCategories.includes(p.category));
+      }
     }
 
-    if (productType === 'skincare' && concern === 'anti-aging') {
-      products.push(
-        {
-          id: 'skincare2',
-          name: 'Crema Anti-Edad con Retinol',
-          description: 'Reduce arrugas y líneas de expresión',
-          price: 125000,
-          images: ['cream1.jpg'],
-          category: 'skincare',
-          tags: ['anti-aging', 'retinol', 'night-cream'],
-          stock: 18,
-          featured: true,
-          sku: 'SK-RETINOL-50',
-          createdAt: new Date(),
-          updatedAt: new Date()
-        }
-      );
+    // Filtrar por presupuesto
+    if (budget) {
+      const budgetRanges: { [key: string]: { min: number, max: number } } = {
+        'budget-low': { min: 0, max: 50000 },
+        'budget-medium': { min: 20000, max: 150000 },
+        'budget-high': { min: 50000, max: 300000 },
+        'budget-premium': { min: 100000, max: Infinity }
+      };
+
+      const range = budgetRanges[budget];
+      if (range) {
+        filteredProducts = filteredProducts.filter(p =>
+          p.price >= range.min && p.price <= range.max
+        );
+      }
     }
 
-    if (productType === 'makeup' && skinType === 'oily') {
-      products.push(
-        {
-          id: 'makeup1',
-          name: 'Base Mate Control Grasa',
-          description: 'Acabado mate y control de brillo para piel grasa',
-          price: 95000,
-          images: ['foundation1.jpg'],
-          category: 'makeup',
-          tags: ['foundation', 'matte', 'oil-control'],
-          stock: 30,
-          featured: true,
-          sku: 'MU-FND-MATE-30',
-          createdAt: new Date(),
-          updatedAt: new Date()
-        }
-      );
+    // Filtrar por preocupación/concern usando tags
+    if (concern) {
+      const concernTags: { [key: string]: string[] } = {
+        'hydration': ['hidratación', 'hidratante'],
+        'anti-aging': ['anti-envejecimiento', 'anti-edad'],
+        'acne-oily': ['purificación', 'poros', 'grasa'],
+        'sensitive': ['sensible', 'suave']
+      };
+
+      const relevantTags = concernTags[concern] || [];
+      if (relevantTags.length > 0) {
+        filteredProducts = filteredProducts.filter(p =>
+          relevantTags.some(tag =>
+            p.tags.some(productTag =>
+              productTag.toLowerCase().includes(tag.toLowerCase()) ||
+              tag.toLowerCase().includes(productTag.toLowerCase())
+            )
+          )
+        );
+      }
     }
 
-    if (productType === 'haircare' && concern === 'hydration') {
-      products.push(
-        {
-          id: 'haircare1',
-          name: 'Mascarilla Capilar Hidratante',
-          description: 'Nutrición intensiva para cabello seco y dañado',
-          price: 65000,
-          images: ['mask1.jpg'],
-          category: 'haircare',
-          tags: ['hair-mask', 'hydration', 'repair'],
-          stock: 22,
-          featured: true,
-          sku: 'HC-MASK-HYD-200',
-          createdAt: new Date(),
-          updatedAt: new Date()
-        }
+    // Priorizar productos destacados
+    filteredProducts.sort((a, b) => {
+      if (a.featured && !b.featured) return -1;
+      if (!a.featured && b.featured) return 1;
+      return 0;
+    });
+
+    return filteredProducts;
+  }
+
+  /**
+   * Generar combos basados en productos recomendados y respuestas del usuario
+   */
+  private generateCombos(productType: string | undefined, products: Product[]): Combo[] {
+    const allCombos = this.comboService.getAllCombos();
+    let recommendedCombos: Combo[] = [];
+
+    // Filtrar combos basados en el tipo de producto seleccionado
+    if (productType) {
+      const categoryMap: { [key: string]: string[] } = {
+        'skincare': ['Skincare', 'Hidratación', 'Anti-Edad'],
+        'makeup': ['Maquillaje'],
+        'haircare': ['Cabello'],
+        'bodycare': ['Corporal'],
+        'labios': ['Labios']
+      };
+
+      const relevantCategories = categoryMap[productType] || [];
+      recommendedCombos = allCombos.filter(combo =>
+        relevantCategories.includes(combo.category) ||
+        relevantCategories.some(cat => combo.tags.some(tag => tag.toLowerCase().includes(cat.toLowerCase())))
       );
+    } else {
+      // Si no hay tipo específico, mostrar combos destacados
+      recommendedCombos = this.comboService.getFeaturedCombos();
     }
 
-    // Ejemplo de combos de belleza
-    if (productType === 'skincare') {
-      combos.push(
-        {
-          id: 'combo1',
-          name: 'Kit Skincare Básico',
-          description: 'Limpiador + Tónico + Hidratante',
-          price: 180000,
-          originalPrice: 220000,
-          images: ['combo1.jpg'],
-          products: [],
-          category: 'combos',
-          tags: ['skincare', 'routine', 'starter-kit'],
-          stock: 15,
-          featured: true,
-          sku: 'COMBO-SKIN-BASIC',
-          createdAt: new Date(),
-          updatedAt: new Date()
-        }
-      );
+    // Priorizar combos que contienen los productos recomendados
+    if (products.length > 0) {
+      const productIds = products.map(p => p.id);
+      const combosWithScore = recommendedCombos.map(combo => ({
+        ...combo,
+        relevanceScore: combo.products.filter(cp => productIds.includes(cp.product.id)).length
+      }));
+
+      combosWithScore.sort((a, b) => (b.relevanceScore || 0) - (a.relevanceScore || 0));
+
+      // Remove the temporary relevanceScore and return clean combos
+      recommendedCombos = combosWithScore.map(({ relevanceScore, ...combo }) => combo) as Combo[];
     }
 
-    if (productType === 'makeup') {
-      combos.push(
-        {
-          id: 'combo2',
-          name: 'Kit Makeup Natural',
-          description: 'Base + Corrector + Máscara + Labial',
-          price: 150000,
-          originalPrice: 185000,
-          images: ['combo2.jpg'],
-          products: [],
-          category: 'combos',
-          tags: ['makeup', 'natural-look', 'complete-set'],
-          stock: 12,
-          featured: true,
-          sku: 'COMBO-MU-NATURAL',
-          createdAt: new Date(),
-          updatedAt: new Date()
-        }
-      );
-    }
-
-    return { products, combos };
+    // Limitar a máximo 2 combos recomendados
+    return recommendedCombos.slice(0, 2);
   }
 
   /**

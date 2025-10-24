@@ -1,0 +1,108 @@
+<section class="combos-preview" id="combos">
+  <div class="combos-preview-container">
+    <!-- Section Header -->
+    <div class="section-header">
+      <h2 class="section-title">Combos Exclusivos</h2>
+      <p class="section-subtitle">Ahorra más con nuestros paquetes especiales</p>
+    </div>
+
+    <!-- Carousel Container -->
+    <div class="carousel-container">
+      @for (slideIndex of getSlideIndices(); track slideIndex; let i = $index) {
+        <div class="slide" [class.active]="i === currentSlide">
+          <div class="combos-grid">
+            @for (combo of getCombosForCurrentSlide(); track combo.id) {
+              <div class="combo-card" (click)="onComboClick(combo)">
+                <!-- Combo Image -->
+                <div class="combo-image-container">
+                  <img [src]="'assets/images/combos/' + combo.images[0]"
+                       [alt]="combo.name"
+                       class="combo-image">
+                  @if (combo.discount) {
+                    <div class="discount-badge">
+                      -{{ combo.discount.percentage }}%
+                    </div>
+                  }
+                  <div class="combo-type-badge">
+                    {{ combo.category }}
+                  </div>
+                </div>
+
+                <!-- Combo Info -->
+                <div class="combo-info">
+                  <h3 class="combo-name">{{ combo.name }}</h3>
+                  <p class="combo-description">{{ combo.description }}</p>
+
+                  <!-- Products in Combo -->
+                  <div class="combo-products">
+                    <div class="products-label">Incluye:</div>
+                    <div class="products-list">
+                      @for (productName of getProductNames(combo).slice(0, 3); track productName; let isLast = $last) {
+                        <span class="product-name">
+                          {{ productName }}{{ !isLast ? ',' : '' }}
+                        </span>
+                      }
+                      @if (getProductNames(combo).length > 3) {
+                        <span class="more-products">+{{ getProductNames(combo).length - 3 }} más</span>
+                      }
+                    </div>
+                  </div>
+
+                  <!-- Price -->
+                  <div class="combo-price">
+                    @if (combo.originalPrice && combo.originalPrice > combo.price) {
+                      <span class="original-price">{{ formatPrice(combo.originalPrice) }}</span>
+                      <span class="discounted-price">{{ formatPrice(combo.price) }}</span>
+                      <div class="savings-label">
+                        Ahorras {{ formatPrice(combo.originalPrice - combo.price) }}
+                      </div>
+                    } @else {
+                      <span class="current-price">{{ formatPrice(combo.price) }}</span>
+                    }
+                  </div>
+
+                  <!-- Tags -->
+                  <div class="combo-tags">
+                    @for (tag of combo.tags.slice(0, 2); track tag) {
+                      <span class="tag">{{ tag }}</span>
+                    }
+                  </div>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+      }
+    </div>
+
+    <!-- Carousel Controls -->
+    @if (totalSlides > 1) {
+      <button class="carousel-control prev" (click)="previousSlide()" aria-label="Previous combos">
+        ‹
+      </button>
+      <button class="carousel-control next" (click)="nextSlide()" aria-label="Next combos">
+        ›
+      </button>
+
+      <!-- Carousel Indicators -->
+      <div class="carousel-indicators">
+        @for (indicator of getSlideIndices(); track indicator; let i = $index) {
+          <button
+            class="indicator"
+            [class.active]="i === currentSlide"
+            (click)="goToSlide(i)"
+            aria-label="Go to combo slide {{ i + 1 }}"
+          ></button>
+        }
+      </div>
+    }
+
+    <!-- CTA Button -->
+    <div class="cta-container">
+      <a routerLink="/catalog" class="cta-button">
+        Ver Todos los Combos
+        <span class="cta-arrow">→</span>
+      </a>
+    </div>
+  </div>
+</section>

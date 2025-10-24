@@ -1,0 +1,89 @@
+<section class="catalog-preview" id="catalog">
+  <div class="catalog-preview-container">
+    <!-- Section Header -->
+    <div class="section-header">
+      <h2 class="section-title">Productos Destacados</h2>
+      <p class="section-subtitle">Descubre nuestros favoritos y best-sellers</p>
+    </div>
+
+    <!-- Carousel Container -->
+    <div class="carousel-container">
+      @for (slideIndex of getSlideIndices(); track slideIndex; let i = $index) {
+        <div class="slide" [class.active]="i === currentSlide">
+          <div class="products-grid">
+            @for (product of getProductsForCurrentSlide(); track product.id) {
+              <div class="product-card" (click)="onProductClick(product)">
+                <!-- Product Image -->
+                <div class="product-image-container">
+                  <img [src]="'assets/images/products/' + product.images[0]"
+                       [alt]="product.name"
+                       class="product-image">
+                  @if (product.discount) {
+                    <div class="discount-badge">
+                      -{{ product.discount.percentage }}%
+                    </div>
+                  }
+                </div>
+
+                <!-- Product Info -->
+                <div class="product-info">
+                  <h3 class="product-name">{{ product.name }}</h3>
+                  <p class="product-description">{{ product.description }}</p>
+
+                  <!-- Price -->
+                  <div class="product-price">
+                    @if (product.discount) {
+                      <span class="original-price">{{ formatPrice(product.price) }}</span>
+                      <span class="discounted-price">
+                        {{ formatPrice(product.price * (1 - product.discount.percentage / 100)) }}
+                      </span>
+                    } @else {
+                      <span class="current-price">{{ formatPrice(product.price) }}</span>
+                    }
+                  </div>
+
+                  <!-- Tags -->
+                  <div class="product-tags">
+                    @for (tag of product.tags.slice(0, 3); track tag) {
+                      <span class="tag">{{ tag }}</span>
+                    }
+                  </div>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+      }
+    </div>
+
+    <!-- Carousel Controls -->
+    @if (totalSlides > 1) {
+      <button class="carousel-control prev" (click)="previousSlide()" aria-label="Previous products">
+        ‹
+      </button>
+      <button class="carousel-control next" (click)="nextSlide()" aria-label="Next products">
+        ›
+      </button>
+
+      <!-- Carousel Indicators -->
+      <div class="carousel-indicators">
+        @for (indicator of getSlideIndices(); track indicator; let i = $index) {
+          <button
+            class="indicator"
+            [class.active]="i === currentSlide"
+            (click)="goToSlide(i)"
+            aria-label="Go to product slide {{ i + 1 }}"
+          ></button>
+        }
+      </div>
+    }
+
+    <!-- CTA Button -->
+    <div class="cta-container">
+      <a routerLink="/catalog" class="cta-button">
+        Ver Catálogo Completo
+        <span class="cta-arrow">→</span>
+      </a>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,97 @@
+.company-banner {
+  width: 100%;
+  background: linear-gradient(135deg, #9A1F3A 0%, #EF326A 50%, #9A1F3A 100%);
+  overflow: hidden;
+  padding: 1.5rem 0;
+  position: relative;
+}
+
+.banner-container {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+.banner-scroll {
+  display: flex;
+  animation: scroll 30s linear infinite;
+  width: fit-content;
+}
+
+.banner-content {
+  display: flex;
+  align-items: center;
+  gap: 4rem;
+  padding: 0 2rem;
+  white-space: nowrap;
+}
+
+.banner-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: white;
+  font-family: 'Alegreya Sans', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+.banner-icon {
+  font-size: 1.3rem;
+  opacity: 0.9;
+}
+
+.banner-text {
+  letter-spacing: 0.5px;
+}
+
+/* Animation */
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+/* Pause animation on hover */
+.company-banner:hover .banner-scroll {
+  animation-play-state: paused;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .company-banner {
+    padding: 1rem 0;
+  }
+
+  .banner-content {
+    gap: 3rem;
+    padding: 0 1rem;
+  }
+
+  .banner-item {
+    font-size: 0.95rem;
+    gap: 0.5rem;
+  }
+
+  .banner-icon {
+    font-size: 1.1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .banner-content {
+    gap: 2rem;
+  }
+
+  .banner-item {
+    font-size: 0.85rem;
+    gap: 0.4rem;
+  }
+
+  .banner-icon {
+    font-size: 1rem;
+  }
+}

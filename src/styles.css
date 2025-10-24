@@ -1,1 +1,41 @@
 /* You can add global styles to this file, and also import other style files */
+
+/* Global reset and overflow fixes */
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  overflow-x: hidden; /* Prevent horizontal scroll */
+}
+
+/* Prevent overflow on all elements */
+img, video, canvas {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Fix for any potential text overflow */
+h1, h2, h3, h4, h5, h6, p, span {
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  hyphens: auto;
+  max-width: 100%;
+}
+
+/* Ensure all containers respect viewport width */
+.container, .container-fluid, .row {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+/* Fix for Angular components */
+app-root, app-header, app-footer, main {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}

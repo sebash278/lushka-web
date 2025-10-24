@@ -1,0 +1,139 @@
+<section class="lushkai-section" id="lushkai">
+  <div class="lushkai-container">
+    <div class="lushkai-header">
+      <h2 class="lushkai-title">LushkAI</h2>
+      <p class="lushkai-subtitle">Tu asistente de belleza personalizado</p>
+    </div>
+
+    <!-- Loading State -->
+    @if (aiState && aiState.isLoading) {
+      <div class="loading-state">
+        <div class="loading-spinner"></div>
+        <p class="loading-text">Analizando tus respuestas...</p>
+      </div>
+    }
+
+    <!-- Questionnaire State -->
+    @if (aiState && aiState.currentQuestion && !aiState.isLoading) {
+      <div class="questionnaire">
+        <!-- Progress Bar -->
+        <div class="progress-container">
+          <div class="progress-bar">
+            <div class="progress-fill" [style.width.%]="getProgress()"></div>
+          </div>
+          <span class="progress-text">
+            Paso {{ aiState.currentQuestion.currentStep }} de {{ aiState.currentQuestion.totalSteps }}
+          </span>
+        </div>
+
+        <!-- Question -->
+        <div class="question-container">
+          <h3 class="question">{{ aiState.currentQuestion.question }}</h3>
+
+          <!-- Options -->
+          <div class="options-container">
+            @for (option of aiState.currentQuestion.options; track option.id) {
+              <button
+                class="option-button"
+                [class.selected]="selectedOption === option.id"
+                (click)="selectOption(option.id)"
+              >
+                {{ option.text }}
+              </button>
+            }
+          </div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="navigation">
+          @if (canGoBack()) {
+            <button class="nav-button back" (click)="goBack()">
+              ← Anterior
+            </button>
+          }
+
+          <button
+            class="nav-button next"
+            [class.disabled]="!canAdvance()"
+            [disabled]="!canAdvance()"
+            (click)="submitAnswer()"
+          >
+            Siguiente →
+          </button>
+        </div>
+      </div>
+    }
+
+    <!-- Recommendation State -->
+    @if (aiState && aiState.isCompleted && aiState.recommendation && !aiState.isLoading) {
+      <div class="recommendation">
+        <div class="recommendation-header">
+          <h3 class="recommendation-title">¡Tus recomendaciones personalizadas!</h3>
+          <p class="recommendation-subtitle">{{ aiState.recommendation.reasoning }}</p>
+          <div class="confidence-badge">
+            Confianza: {{ getConfidencePercentage() }}%
+          </div>
+        </div>
+
+        <!-- Recommended Products -->
+        @if (aiState.recommendation.products.length > 0) {
+          <div class="products-section">
+            <h4 class="section-title">Productos Recomendados</h4>
+            <div class="products-grid">
+              @for (product of aiState.recommendation.products; track product.id) {
+                <div class="product-card">
+                  <div class="product-image">
+                    <img [src]="'/assets/images/products/' + product.images[0]" [alt]="product.name" />
+                  </div>
+                  <div class="product-info">
+                    <h5 class="product-name">{{ product.name }}</h5>
+                    <p class="product-description">{{ product.description }}</p>
+                    <div class="product-price">${{ product.price.toLocaleString() }}</div>
+                    <button class="add-to-cart" (click)="addToCart(product.id)">
+                      Agregar al carrito
+                    </button>
+                  </div>
+                </div>
+              }
+            </div>
+          </div>
+        }
+
+        <!-- Recommended Combos -->
+        @if (aiState.recommendation.combos.length > 0) {
+          <div class="combos-section">
+            <h4 class="section-title">Combos Recomendados</h4>
+            <div class="combos-grid">
+              @for (combo of aiState.recommendation.combos; track combo.id) {
+                <div class="combo-card">
+                  <div class="combo-badge">Ahorra ${{ (combo.originalPrice - combo.price).toLocaleString() }}</div>
+                  <div class="combo-image">
+                    <img [src]="'/assets/images/combos/' + combo.images[0]" [alt]="combo.name" />
+                  </div>
+                  <div class="combo-info">
+                    <h5 class="combo-name">{{ combo.name }}</h5>
+                    <p class="combo-description">{{ combo.description }}</p>
+                    <div class="combo-price">
+                      <span class="current-price">${{ combo.price.toLocaleString() }}</span>
+                      <span class="original-price">${{ combo.originalPrice.toLocaleString() }}</span>
+                    </div>
+                    <button class="add-to-cart" (click)="addToCart(combo.id)">
+                      Agregar combo al carrito
+                    </button>
+                  </div>
+                </div>
+              }
+            </div>
+          </div>
+        }
+
+        <!-- Reset Button -->
+        <div class="recommendation-actions">
+          <button class="reset-button" (click)="reset()">
+            Hacer otra recomendación
+          </button>
+        </div>
+      </div>
+    }
+  </div>
+</section>
