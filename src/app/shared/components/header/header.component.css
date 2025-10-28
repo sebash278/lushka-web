@@ -8,7 +8,7 @@
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   z-index: 1000;
   width: 100%;
-  overflow-x: hidden;
+  overflow: hidden;
 }
 
 .header .header-container {
@@ -20,7 +20,7 @@
   justify-content: space-between;
   height: 80px;
   width: 100%;
-  overflow-x: hidden;
+  overflow: hidden;
 }
 
 /* Navigation and Cart Container - positioned to the right */
@@ -33,13 +33,23 @@
 /* Logo */
 .header .logo .logo-link {
   text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
 }
 
-.header .logo .logo-link .logo-text {
-  font-size: 2rem;
-  font-weight: bold;
-  color: #9A1F3A;
-  font-family: 'Playfair Display', serif;
+.header .logo .logo-link .logo-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: contain;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  background-color: transparent;
+}
+
+.header .logo .logo-link .logo-icon:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 15px rgba(154, 31, 58, 0.3);
 }
 
 /* Navigation */
@@ -55,7 +65,7 @@
   text-decoration: none;
   color: #941F3A;
   font-weight: 500;
-  font-size: 1rem;
+  font-size: 1.2rem;
   transition: color 0.3s ease;
   position: relative;
 }
@@ -105,10 +115,21 @@
   position: relative;
   font-size: 1.8rem;
   transition: transform 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.header .cart-section .cart-link .cart-icon i {
+  color: #761732;
+  transition: color 0.3s ease;
 }
 
 .header .cart-section .cart-link .cart-icon:hover {
   transform: scale(1.1);
+}
+
+.header .cart-section .cart-link .cart-icon:hover i {
   color: #EF326A;
 }
 
@@ -140,11 +161,12 @@
   }
 
   .header .nav-bar .nav-list .nav-item .nav-link {
-    font-size: 0.9rem;
+    font-size: 1.1rem;
   }
 
-  .header .logo .logo-link .logo-text {
-    font-size: 1.6rem;
+  .header .logo .logo-link .logo-icon {
+    width: 50px;
+    height: 50px;
   }
 }
 
@@ -159,11 +181,12 @@
   }
 
   .header .nav-bar .nav-list .nav-item .nav-link {
-    font-size: 0.85rem;
+    font-size: 1rem;
   }
 
-  .header .logo .logo-link .logo-text {
-    font-size: 1.3rem;
+  .header .logo .logo-link .logo-icon {
+    width: 40px;
+    height: 40px;
   }
 
   .header .cart-section .cart-link .cart-icon {

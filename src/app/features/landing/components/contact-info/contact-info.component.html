@@ -1,0 +1,79 @@
+<section class="contact-info" id="contact">
+  <div class="contact-container">
+    <!-- Section Header -->
+    <div class="section-header">
+      <h2 class="section-title">Contacto</h2>
+      <p class="section-subtitle">Estamos aquí para ayudarte</p>
+    </div>
+
+    <div class="contact-content">
+      <!-- Contact Information -->
+      <div class="contact-details">
+        <!-- Contact Methods -->
+        <div class="contact-methods">
+          @for (method of contactInfo; track method.title) {
+            <div class="contact-method" (click)="method.title === 'WhatsApp' ? openWhatsApp() : openEmail()">
+              <div class="method-icon">{{ method.icon }}</div>
+              <div class="method-info">
+                <h3 class="method-title">{{ method.title }}</h3>
+                <p class="method-content">{{ method.content }}</p>
+                <p class="method-action">{{ method.action }}</p>
+              </div>
+              <div class="method-arrow">→</div>
+            </div>
+          }
+        </div>
+
+        <!-- Schedule Information -->
+        <div class="schedule-info">
+          <h3 class="schedule-title">
+            <span class="schedule-icon">🕐</span>
+            Horario de Atención
+          </h3>
+          <div class="schedule-items">
+            <div class="schedule-item">
+              <span class="schedule-days">Lunes - Viernes</span>
+              <span class="schedule-hours">9:00 AM - 9:00 PM</span>
+            </div>
+            <div class="schedule-item">
+              <span class="schedule-days">Sábados</span>
+              <span class="schedule-hours">9:00 AM - 6:00 PM</span>
+            </div>
+            <div class="schedule-item closed">
+              <span class="schedule-days">Domingos y festivos</span>
+              <span class="schedule-hours">No hay atención</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Additional Info -->
+        <div class="contact-footer">
+          <p class="response-time">
+            <span class="response-icon">⚡</span>
+            Tiempo de respuesta: Menos de 2 horas
+          </p>
+          <p class="service-coverage">
+            <span class="coverage-icon">🌎</span>
+            Atención en todo Bogotá
+          </p>
+        </div>
+      </div>
+
+      <!-- Contact Image -->
+      <div class="contact-image-container">
+        <img
+          src="/contact-image.png"
+          alt="Contacto Lushka - Atención al cliente"
+          class="contact-image"
+          onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+        >
+        <div class="contact-image-placeholder" style="display: none;">
+          <div class="placeholder-content">
+            <span class="placeholder-icon">📞</span>
+            <span class="placeholder-text">Imagen de contacto</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
