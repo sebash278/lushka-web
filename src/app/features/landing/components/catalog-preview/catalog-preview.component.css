@@ -11,14 +11,14 @@
   position: relative;
 }
 
-/* Section Header */
+/* Encabezado de sección */
 .section-header {
   text-align: center;
   margin-bottom: 3rem;
 }
 
 .section-title {
-  font-size: 2.5rem;
+  font-size: 3rem; /* Aumentado desde 2.5rem */
   font-weight: bold;
   color: #9A1F3A;
   margin-bottom: 1rem;
@@ -26,16 +26,16 @@
 }
 
 .section-subtitle {
-  font-size: 1.2rem;
+  font-size: 1.4rem; /* Aumentado desde 1.2rem */
   color: #761732;
   font-family: 'Alegreya Sans', sans-serif;
 }
 
-/* Carousel Container */
+/* Contenedor del carrusel */
 .carousel-container {
   position: relative;
   width: 100%;
-  height: 500px;
+  height: 650px;
   overflow: hidden;
   margin-bottom: 3rem;
 }
@@ -57,7 +57,7 @@
   transform: translateX(0);
 }
 
-/* Products Grid */
+/* Cuadrícula de productos */
 .products-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -66,7 +66,7 @@
   padding: 0 2rem;
 }
 
-/* Product Card */
+/* Tarjeta de producto */
 .product-card {
   background: white;
   border-radius: 15px;
@@ -87,7 +87,7 @@
   box-shadow: 0 5px 20px rgba(154, 31, 58, 0.15);
 }
 
-/* Product Image */
+/* Imagen del producto */
 .product-image-container {
   position: relative;
   width: 100%;
@@ -116,17 +116,17 @@
   padding: 0.5rem 0.75rem;
   border-radius: 25px;
   font-weight: 600;
-  font-size: 0.85rem;
+  font-size: 0.95rem;
   font-family: 'Alegreya Sans', sans-serif;
 }
 
-/* Product Info */
+/* Información del producto */
 .product-info {
   padding: 1.5rem;
 }
 
 .product-name {
-  font-size: 1.2rem;
+  font-size: 1.4rem;
   font-weight: 600;
   color: #9A1F3A;
   margin-bottom: 0.5rem;
@@ -135,7 +135,7 @@
 }
 
 .product-description {
-  font-size: 0.9rem;
+  font-size: 1rem;
   color: #666;
   margin-bottom: 1rem;
   line-height: 1.4;
@@ -146,7 +146,7 @@
   overflow: hidden;
 }
 
-/* Product Price */
+/* Precio del producto */
 .product-price {
   margin-bottom: 1rem;
 }
@@ -154,7 +154,7 @@
 .original-price {
   text-decoration: line-through;
   color: #999;
-  font-size: 0.9rem;
+  font-size: 1rem;
   margin-right: 0.5rem;
   font-family: 'Alegreya Sans', sans-serif;
 }
@@ -162,12 +162,12 @@
 .discounted-price,
 .current-price {
   color: #9A1F3A;
-  font-size: 1.3rem;
+  font-size: 1.4rem;
   font-weight: bold;
   font-family: 'Lisu Bosa', serif;
 }
 
-/* Product Tags */
+/* Etiquetas del producto */
 .product-tags {
   display: flex;
   flex-wrap: wrap;
@@ -179,13 +179,56 @@
   color: #9A1F3A;
   padding: 0.25rem 0.75rem;
   border-radius: 15px;
-  font-size: 0.75rem;
+  font-size: 0.85rem;
   font-weight: 500;
   font-family: 'Alegreya Sans', sans-serif;
   border: 1px solid rgba(154, 31, 58, 0.2);
 }
 
-/* Carousel Controls */
+/* Botón agregar al carrito */
+.add-to-cart-btn {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: #9A1F3A;
+  color: white;
+  border: none;
+  border-radius: 25px;
+  font-weight: 600;
+  font-size: 1rem;
+  font-family: 'Alegreya Sans', sans-serif;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  box-shadow: 0 2px 8px rgba(154, 31, 58, 0.2);
+}
+
+.add-to-cart-btn:hover:not(:disabled) {
+  background: #EF326A;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(239, 50, 106, 0.3);
+}
+
+.add-to-cart-btn:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: 0 2px 6px rgba(154, 31, 58, 0.2);
+}
+
+.add-to-cart-btn:disabled {
+  background: #ccc;
+  color: #666;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.add-to-cart-btn i {
+  font-size: 0.85rem;
+}
+
+/* Controles del carrusel */
 .carousel-control {
   position: absolute;
   top: 50%;
@@ -217,7 +260,7 @@
   right: -60px;
 }
 
-/* Adjust positioning for smaller screens where arrows might be hidden */
+/* Ajustar posicionamiento para pantallas más pequeñas donde las flechas podrían estar ocultas */
 @media (max-width: 1200px) {
   .carousel-control.prev {
     left: 1rem;
@@ -228,7 +271,7 @@
   }
 }
 
-/* Carousel Indicators */
+/* Indicadores del carrusel */
 .carousel-indicators {
   position: absolute;
   bottom: -40px;
@@ -258,7 +301,7 @@
   background: rgba(239, 50, 106, 0.3);
 }
 
-/* CTA Container */
+/* Contenedor CTA */
 .cta-container {
   text-align: center;
   margin-top: 5rem;
@@ -297,7 +340,7 @@
   transform: translateX(3px);
 }
 
-/* Responsive Design */
+/* Diseño responsivo */
 @media (max-width: 1024px) {
   .products-grid {
     grid-template-columns: repeat(2, 1fr);
@@ -305,7 +348,7 @@
   }
 
   .carousel-container {
-    height: 500px;
+    height: 600px;
   }
 }
 
@@ -329,7 +372,7 @@
   }
 
   .carousel-container {
-    height: 600px;
+    height: 700px;
   }
 
   .carousel-control {
@@ -354,7 +397,7 @@
 
 @media (max-width: 480px) {
   .carousel-container {
-    height: 550px;
+    height: 650px;
   }
 
   .product-info {

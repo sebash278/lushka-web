@@ -1,24 +1,89 @@
-/* You can add global styles to this file, and also import other style files */
+/* Puedes agregar estilos globales a este archivo, y también importar otros archivos de estilos */
 
-/* Global reset and overflow fixes */
+/* Importación de fuentes de Google */
+@import url('https://fonts.googleapis.com/css2?family=Alegreya+Sans:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lisu+Bosa:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&display=swap');
+
+/* Reinicio global y correcciones de desbordamiento */
 * {
   box-sizing: border-box;
+}
+
+/* Configuración global de fuentes */
+body {
+  font-family: 'Alegreya Sans', sans-serif;
+  font-weight: 400;
+  font-size: 1.1rem; /* Aumentado desde el valor predeterminado */
+  line-height: 1.6;
+  color: #333;
+}
+
+/* Asegurar que todos los elementos de texto usen las fuentes definidas */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Lisu Bosa', serif;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+h1 {
+  font-size: 3rem;
+}
+
+h2 {
+  font-size: 2.5rem;
+}
+
+h3 {
+  font-size: 2rem;
+}
+
+h4 {
+  font-size: 1.75rem;
+}
+
+h5 {
+  font-size: 1.5rem;
+}
+
+h6 {
+  font-size: 1.3rem;
+}
+
+p, span, div, li, a, button, input, textarea, select {
+  font-family: 'Alegreya Sans', sans-serif;
+}
+
+/* Elementos de texto especiales */
+.section-title, .hero-title, .feature-title {
+  font-family: 'Lisu Bosa', serif !important;
+}
+
+/* Los elementos de interfaz deben usar Poppins */
+.btn, .button, .cart-count, .price, .tag {
+  font-family: 'Poppins', sans-serif !important;
+}
+
+/* Texto elegante de visualización */
+.display-text, .elegant-text {
+  font-family: 'Playfair Display', serif !important;
 }
 
 html, body {
   margin: 0;
   padding: 0;
   width: 100%;
-  overflow-x: hidden; /* Prevent horizontal scroll */
+  overflow-x: hidden; /* Prevenir desplazamiento horizontal */
 }
 
-/* Prevent overflow on all elements */
+/* Prevenir desbordamiento en todos los elementos */
 img, video, canvas {
   max-width: 100%;
   height: auto;
 }
 
-/* Fix for any potential text overflow */
+/* Corrección para cualquier desbordamiento de texto potencial */
 h1, h2, h3, h4, h5, h6, p, span {
   overflow-wrap: break-word;
   word-wrap: break-word;
@@ -26,13 +91,13 @@ h1, h2, h3, h4, h5, h6, p, span {
   max-width: 100%;
 }
 
-/* Ensure all containers respect viewport width */
+/* Asegurar que todos los contenedores respeten el ancho del viewport */
 .container, .container-fluid, .row {
   max-width: 100%;
   overflow-x: hidden;
 }
 
-/* Fix for Angular components */
+/* Corrección para componentes de Angular */
 app-root, app-header, app-footer, main {
   display: block;
   width: 100%;

@@ -1,0 +1,121 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+.category-filters {
+  width: 100%;
+  padding: 20px 0;
+  font-family: 'Poppins', sans-serif;
+}
+
+.category-list {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 40px;
+  flex-wrap: wrap;
+}
+
+.category-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  text-decoration: none;
+  color: inherit;
+  gap: 16px;
+}
+
+.category-circle {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  overflow: hidden;
+  position: relative;
+  border: 4px solid transparent;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+.category-item:hover .category-circle {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 15px 35px rgba(233, 30, 99, 0.25);
+  border-color: #ff4081;
+}
+
+.category-item.active .category-circle {
+  border-color: #ff4081;
+  box-shadow: 0 8px 30px rgba(233, 30, 99, 0.35);
+  transform: scale(0.98);
+}
+
+.category-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  filter: brightness(1);
+}
+
+.category-item:hover .category-image {
+  transform: scale(1.08);
+  filter: brightness(1.1);
+}
+
+.category-item.active .category-image {
+  transform: scale(0.95);
+  filter: brightness(0.95);
+}
+
+.category-name {
+  text-align: center;
+  font-size: 15px;
+  font-weight: 500;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  color: #4a5568;
+  transition: all 0.3s ease;
+  font-family: 'Poppins', sans-serif;
+}
+
+.category-item:hover .category-name {
+  color: #ff4081;
+  font-weight: 600;
+  transform: translateY(-2px);
+}
+
+.category-item.active .category-name {
+  color: #e91e63;
+  font-weight: 600;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .category-list {
+    gap: 24px;
+  }
+
+  .category-circle {
+    width: 120px;
+    height: 120px;
+  }
+
+  .category-name {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .category-list {
+    gap: 16px;
+  }
+
+  .category-circle {
+    width: 100px;
+    height: 100px;
+  }
+
+  .category-name {
+    font-size: 12px;
+  }
+}

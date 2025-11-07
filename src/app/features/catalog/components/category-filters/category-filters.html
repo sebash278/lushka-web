@@ -1,0 +1,22 @@
+<div class="category-filters">
+  <div class="category-list">
+    @for (category of categories; track category.id) {
+      <div
+        class="category-item"
+        [class.active]="category.isActive"
+        (click)="onCategoryClick(category)"
+        [attr.aria-label]="category.name"
+        [attr.title]="category.name"
+      >
+        <div class="category-circle">
+          <img
+            [src]="category.image"
+            [alt]="category.name"
+            class="category-image"
+          />
+        </div>
+        <span class="category-name">{{ category.name }}</span>
+      </div>
+    }
+  </div>
+</div>

@@ -1,0 +1,71 @@
+<div class="product-grid">
+  @if (loading) {
+    <div class="loading-container">
+      <div class="loading-spinner"></div>
+      <p>Cargando productos...</p>
+    </div>
+  } @else {
+    @if (products.length === 0) {
+      <div class="empty-state">
+        <p>No se encontraron productos</p>
+      </div>
+    } @else {
+      <div class="products-container">
+        @for (product of products; track product.id) {
+          <div class="product-card" (click)="onProductClick(product)">
+            <div class="product-image-container">
+              <img
+                [src]="product.images[0]"
+                [alt]="product.name"
+                class="product-image"
+              />
+              @if (product.discount) {
+                <div class="discount-badge">
+                  -{{ product.discount.percentage }}%
+                </div>
+              }
+              @if (product.featured) {
+                <div class="featured-badge">
+                  ★
+                </div>
+              }
+            </div>
+            <div class="product-info">
+              <h3 class="product-name" [title]="product.name">
+                {{ truncateText(product.name, 30) }}
+              </h3>
+              <p class="product-description" [title]="product.description">
+                {{ truncateText(product.description, 60) }}
+              </p>
+              <div class="product-tags">
+                @for (tag of product.tags.slice(0, 2); track tag) {
+                  <span class="product-tag">{{ tag }}</span>
+                }
+                @if (product.tags.length > 2) {
+                  <span class="product-tag">+{{ product.tags.length - 2 }}</span>
+                }
+              </div>
+              <div class="product-footer">
+                <div class="product-price">
+                  @if (product.discount) {
+                    <span class="original-price">{{ formatPrice(product.price) }}</span>
+                    <span class="discounted-price">
+                      {{ formatPrice(product.price * (1 - product.discount.percentage / 100)) }}
+                    </span>
+                  } @else {
+                    <span class="regular-price">{{ formatPrice(product.price) }}</span>
+                  }
+                </div>
+                <div class="product-actions">
+                  <button class="add-to-cart-btn">
+                    Añadir
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    }
+  }
+</div>

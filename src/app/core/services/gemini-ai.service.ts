@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
-import { AIRecommendation, UserAnswer } from '../../shared/models';
+import { AIRecommendation, UserAnswer, Product } from '../../shared/models';
+import { ProductLoaderService } from '../../features/catalog/services/product-loader.service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,12 +12,23 @@ export class GeminiAiService {
   private readonly GEMINI_API_KEY = 'AIzaSyB7wZAW5WQaRP86oPyTTz_2Lvj5uDxIJ0s';
   private readonly GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent';
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private productLoader: ProductLoaderService
+  ) {}
 
   /**
-   * Generate real AI recommendations using Gemini
+   * Generar recomendaciones de IA usando productos reales (API de Gemini temporalmente deshabilitada)
    */
   generateRecommendation(answers: UserAnswer[]): Observable<AIRecommendation> {
+    // Usando temporalmente solo recomendaciones de productos reales para evitar errores de API
+    console.log('Using real product recommendations based on user answers:', answers);
+
+    // Retornar recomendaciones de respaldo que usan productos reales
+    return of(this.createFallbackRecommendation(answers));
+
+    // Código original de API de Gemini (comentado por ahora):
+    /*
     const prompt = this.buildPrompt(answers);
 
     const requestBody = {
@@ -43,10 +55,10 @@ export class GeminiAiService {
       catchError(error => {
         console.error('Gemini API error:', error);
         console.log('Using fallback recommendations due to API error');
-        // Fallback to mock recommendations if API fails
         return of(this.createFallbackRecommendation(answers));
       })
     );
+    */
   }
 
   /**
@@ -78,8 +90,8 @@ INSTRUCCIONES IMPORTANTES:
 Ejemplos de cómo adaptar:
 - Si eligen skincare + anti-aging + piel seca → recomendar cremas con ácido hialurónico
 - Si eligen makeup + piel grasa → recomendar bases mate oil-free
-- Si eligen budget bajo → productos entre $20-50mil
-- Si eligen budget alto → productos premium $150-300mil
+- Si eligen budget bajo → productos económicos $8-15mil
+- Si eligen budget alto → productos premium $30-42mil
 
 Responde ÚNICAMENTE en formato JSON así:
 {
@@ -144,51 +156,289 @@ RECUERDA: Personaliza las recomendaciones según las respuestas específicas del
   }
 
   /**
-   * Fallback recommendations if AI fails
+   * Fallback recommendations if AI fails - uses real products with variety
    */
   private createFallbackRecommendation(answers: UserAnswer[]): AIRecommendation {
     const productType = answers.find(a => a.questionId === 'q1')?.value || 'skincare';
+    const budget = answers.find(a => a.questionId === 'q2')?.value;
+    const concern = answers.find(a => a.questionId === 'q3')?.value;
+    const skinType = answers.find(a => a.questionId === 'q4')?.value;
+    const ingredientType = answers.find(a => a.questionId === 'q5')?.value;
 
-    const fallbackProducts = [
-      {
-        id: 'fallback1',
-        name: 'Sérum Vitalidad',
-        description: 'Sérum hidratante con vitamina C para todo tipo de piel',
-        price: 85000,
-        images: ['serum-vitalidad.jpg'],
-        category: productType,
-        tags: ['hydration', 'vitamin-c', 'serum'],
-        stock: 25,
-        featured: true,
-        sku: 'SK-VITA-30',
-        createdAt: new Date(),
-        updatedAt: new Date()
-      },
-      {
-        id: 'fallback2',
-        name: 'Crema Nutritiva',
-        description: 'Crema facial nutritiva con ingredientes naturales',
-        price: 75000,
-        images: ['crema-nutritiva.jpg'],
-        category: productType,
-        tags: ['nutrition', 'natural', 'daily-care'],
-        stock: 30,
-        featured: true,
-        sku: 'SK-NUTRI-50',
-        createdAt: new Date(),
-        updatedAt: new Date()
+    console.log('=== AI FALLBACK DEBUG START ===');
+    console.log('AI Fallback - User Answers:', answers);
+    console.log('AI Fallback - Product Type:', productType);
+    console.log('AI Fallback - Budget:', budget);
+    console.log('AI Fallback - Concern:', concern);
+    console.log('AI Fallback - Skin Type:', skinType);
+
+    // Map questionnaire answers to real product categories
+    const categoryMap: { [key: string]: string } = {
+      'skincare': 'facial',
+      'makeup': 'facial',
+      'haircare': 'capilar',
+      'bodycare': 'corporal'
+    };
+
+    const targetCategory = categoryMap[productType] || 'facial';
+    console.log('AI Fallback - Target Category:', targetCategory);
+
+    // Get real products from the target category that have valid images
+    let availableProducts = this.productLoader.getProductsWithValidImagesByCategory(targetCategory);
+    console.log('AI Fallback - Target Category:', targetCategory);
+    console.log('AI Fallback - Available Products in Category:', availableProducts.length);
+    console.log('AI Fallback - Category Products:', availableProducts.map(p => ({ id: p.id, name: p.name, category: p.category })));
+
+    // If no products in target category, try facial as fallback
+    if (availableProducts.length === 0) {
+      console.log('AI Fallback - No products in target category, using facial as fallback');
+      availableProducts = this.productLoader.getProductsWithValidImagesByCategory('facial');
+      console.log('AI Fallback - Facial Products:', availableProducts.map(p => ({ id: p.id, name: p.name, category: p.category })));
+    }
+
+    // If still no products, try all categories EXCLUDING combos
+    if (availableProducts.length === 0) {
+      console.log('AI Fallback - No products in facial, using all non-combo products');
+      const allProducts = this.productLoader.getProductsWithValidImages();
+      console.log('AI Fallback - All valid products before filtering:', allProducts.map(p => ({ id: p.id, name: p.name, category: p.category })));
+      availableProducts = allProducts.filter(product => product.category !== 'combos');
+      console.log('AI Fallback - Available non-combo products:', availableProducts.length);
+      console.log('AI Fallback - Final products after filtering:', availableProducts.map(p => ({ id: p.id, name: p.name, category: p.category })));
+    }
+
+    // Filter by budget if specified
+    if (budget && availableProducts.length > 0) {
+      const budgetRanges: { [key: string]: { min: number, max: number } } = {
+        'budget-low': { min: 8000, max: 15000 },
+        'budget-medium': { min: 18000, max: 25000 },
+        'budget-high': { min: 30000, max: 42000 },
+        'budget-premium': { min: 42000, max: Infinity }
+      };
+
+      const range = budgetRanges[budget];
+      if (range) {
+        const beforeBudget = availableProducts.length;
+        availableProducts = availableProducts.filter(p =>
+          p.price >= range.min && p.price <= range.max
+        );
+        console.log(`AI Fallback - Budget Filter (${budget}): ${beforeBudget} -> ${availableProducts.length} products`);
       }
-    ];
+    }
+
+    // Filter by concern using tags
+    if (concern && availableProducts.length > 0) {
+      const concernTags: { [key: string]: string[] } = {
+        'hydration': ['hidratación', 'hidratante'],
+        'anti-aging': ['anti-envejecimiento', 'anti-edad'],
+        'acne-oily': ['purificación', 'poros', 'grasa'],
+        'sensitive': ['sensible', 'suave']
+      };
+
+      const relevantTags = concernTags[concern] || [];
+      if (relevantTags.length > 0) {
+        const beforeConcern = availableProducts.length;
+        availableProducts = availableProducts.filter(p =>
+          relevantTags.some(tag =>
+            p.tags.some(productTag =>
+              productTag.toLowerCase().includes(tag.toLowerCase()) ||
+              tag.toLowerCase().includes(productTag.toLowerCase())
+            )
+          )
+        );
+        console.log(`AI Fallback - Concern Filter (${concern}): ${beforeConcern} -> ${availableProducts.length} products`);
+      }
+    }
+
+    // Filter by skin type using tags
+    if (skinType && availableProducts.length > 0) {
+      const skinTypeTags: { [key: string]: string[] } = {
+        'dry': ['seca', 'nutrición', 'hidratante'],
+        'oily': ['grasa', 'purificación', 'control'],
+        'combination': ['mixta', 'balance'],
+        'normal': ['normal', 'suave', 'diario']
+      };
+
+      const relevantTags = skinTypeTags[skinType] || [];
+      if (relevantTags.length > 0) {
+        const beforeSkinType = availableProducts.length;
+        availableProducts = availableProducts.filter(p =>
+          relevantTags.some(tag =>
+            p.tags.some(productTag =>
+              productTag.toLowerCase().includes(tag.toLowerCase()) ||
+              tag.toLowerCase().includes(productTag.toLowerCase())
+            )
+          )
+        );
+        console.log(`AI Fallback - Skin Type Filter (${skinType}): ${beforeSkinType} -> ${availableProducts.length} products`);
+      }
+    }
+
+    // If no products after filtering, get all non-combo products as final fallback but RESPECT BUDGET
+    if (availableProducts.length === 0) {
+      console.log('AI Fallback - No products after filtering, getting all non-combo products as final fallback (respecting budget)');
+      const allProducts = this.productLoader.getProductsWithValidImages();
+      console.log('AI Fallback - All products from loader:', allProducts.map(p => ({ id: p.id, name: p.name, category: p.category, price: p.price })));
+      availableProducts = allProducts.filter(product => product.category !== 'combos');
+
+      // Apply budget filter even in fallback case
+      if (budget) {
+        const budgetRanges: { [key: string]: { min: number, max: number } } = {
+          'budget-low': { min: 8000, max: 15000 },
+          'budget-medium': { min: 18000, max: 25000 },
+          'budget-high': { min: 30000, max: 42000 },
+          'budget-premium': { min: 42000, max: Infinity }
+        };
+
+        const range = budgetRanges[budget];
+        if (range) {
+          const beforeBudget = availableProducts.length;
+          availableProducts = availableProducts.filter(p =>
+            p.price >= range.min && p.price <= range.max
+          );
+          console.log(`AI Fallback - Budget Filter Applied (${budget}): ${beforeBudget} -> ${availableProducts.length} products`);
+
+          // If still no products in budget range, expand to next higher budget range
+          if (availableProducts.length === 0) {
+            console.log('AI Fallback - No products in selected budget, expanding to next range');
+            if (budget === 'budget-premium') {
+              // For premium, include products from $30k+
+              availableProducts = allProducts.filter(product =>
+                product.category !== 'combos' && product.price >= 30000
+              );
+            } else if (budget === 'budget-high') {
+              // For high, include premium range too
+              availableProducts = allProducts.filter(product =>
+                product.category !== 'combos' && product.price >= 30000
+              );
+            } else if (budget === 'budget-medium') {
+              // For medium, include high and premium
+              availableProducts = allProducts.filter(product =>
+                product.category !== 'combos' && product.price >= 18000
+              );
+            }
+          }
+        }
+      }
+
+      console.log('AI Fallback - Final fallback products available:', availableProducts.length);
+      console.log('AI Fallback - Final fallback products:', availableProducts.map(p => ({ id: p.id, name: p.name, category: p.category, price: p.price })));
+    }
+
+    // Add variety - shuffle products based on user answers + time for variety
+    if (availableProducts.length > 0) {
+      const answerHash = answers.map(a => a.value).join('-');
+      const timeSeed = Math.floor(Date.now() / 10000); // Changes every 10 seconds
+      const seed = answerHash.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0) + timeSeed;
+      availableProducts.sort((a, b) => {
+        const aHash = (a.id.charCodeAt(0) + seed) % availableProducts.length;
+        const bHash = (b.id.charCodeAt(0) + seed) % availableProducts.length;
+        return aHash - bHash;
+      });
+      console.log('AI Fallback - Shuffled products with time-based seed:', timeSeed);
+    }
+
+    // Limit to 3 products but ensure variety
+    const fallbackProducts = availableProducts.slice(0, 3);
+    console.log('AI Fallback - Final Products Selected:', fallbackProducts.map(p => ({ id: p.id, name: p.name, category: p.category })));
+    console.log('=== AI FALLBACK DEBUG END ===');
+
+    // Get combo products with valid images only if we have regular products
+    let comboProducts: any[] = [];
+    if (fallbackProducts.length < 3) {
+      const comboProductsRaw = this.productLoader.getProductsWithValidImagesByCategory('combos')
+        .filter(combo => combo.featured)
+        .slice(0, 1);
+
+      // Convert Product objects to Combo objects for compatibility
+      comboProducts = comboProductsRaw.map(product => ({
+        id: product.id,
+        name: product.name,
+        description: product.description,
+        price: product.price,
+        originalPrice: product.discount ? product.price * (1 + product.discount.percentage / 100) : product.price,
+        images: product.images,
+        category: product.category,
+        tags: product.tags,
+        stock: product.stock,
+        featured: product.featured,
+        sku: product.sku,
+        createdAt: product.createdAt,
+        updatedAt: product.updatedAt,
+        discount: product.discount,
+        // For combo products, we'll simulate the products array using tags
+        products: product.tags.map((tag, index) => ({
+          id: `${product.id}_${index}`,
+          quantity: 1,
+          product: {
+            id: `${product.id}_${index}`,
+            name: tag,
+            description: `Producto ${tag} del combo ${product.name}`,
+            price: product.price / product.tags.length,
+            images: product.images,
+            category: product.category,
+            tags: [tag],
+            stock: product.stock,
+            featured: false,
+            sku: `${product.sku}_${index}`,
+            createdAt: product.createdAt,
+            updatedAt: product.updatedAt
+          } as Product
+        }))
+      }));
+    }
 
     return {
       id: `rec_${Date.now()}`,
       products: fallbackProducts,
-      combos: [],
-      reasoning: 'Recomendaciones basadas en tus preferencias de belleza',
-      confidence: 0.60,
+      combos: comboProducts,
+      reasoning: this.generateReasoning(answers),
+      confidence: 0.75,
       answers,
       createdAt: new Date()
     };
+  }
+
+  /**
+   * Generate reasoning for fallback recommendations
+   */
+  private generateReasoning(answers: UserAnswer[]): string {
+    const reasoning: string[] = [];
+
+    const productType = answers.find(a => a.questionId === 'q1')?.value;
+    const budget = answers.find(a => a.questionId === 'q2')?.value;
+    const concern = answers.find(a => a.questionId === 'q3')?.value;
+
+    if (productType) {
+      const productTypeMap: { [key: string]: string } = {
+        'skincare': 'cuidado facial (skincare)',
+        'makeup': 'maquillaje',
+        'haircare': 'cuidado del cabello',
+        'bodycare': 'cuidado corporal'
+      };
+      reasoning.push(`Basado en tu interés en ${productTypeMap[productType]}`);
+    }
+
+    if (budget) {
+      const budgetMap: { [key: string]: string } = {
+        'budget-low': 'rango económico ($8k-$15k)',
+        'budget-medium': 'rango estándar ($18k-$25k)',
+        'budget-high': 'rango premium ($30k-$42k)',
+        'budget-premium': 'rango de lujo ($42k+)'
+      };
+      reasoning.push(`con presupuesto en el ${budgetMap[budget]}`);
+    }
+
+    if (concern) {
+      const concernMap: { [key: string]: string } = {
+        'hydration': 'hidratación',
+        'anti-aging': 'anti-envejecimiento',
+        'acne-oily': 'control de acné y grasa',
+        'sensitive': 'piel sensible'
+      };
+      reasoning.push(`para tratar ${concernMap[concern]}`);
+    }
+
+    return reasoning.join(', ') + '. Estos productos son perfectos para tus necesidades.';
   }
 
   /**
@@ -217,10 +467,10 @@ RECUERDA: Personaliza las recomendaciones según las respuestas específicas del
         'bodycare': 'Cuidado corporal'
       },
       'q2': {
-        'budget-low': '$20.000 - $50.000',
-        'budget-medium': '$50.000 - $150.000',
-        'budget-high': '$150.000 - $300.000',
-        'budget-premium': '$300.000+'
+        'budget-low': '$8.000 - $15.000 (Económico)',
+        'budget-medium': '$18.000 - $25.000 (Estándar)',
+        'budget-high': '$30.000 - $42.000 (Premium)',
+        'budget-premium': '$42.000+ (Lujo)'
       },
       'q3': {
         'hydration': 'Hidratación',

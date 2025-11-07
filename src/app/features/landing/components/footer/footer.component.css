@@ -42,7 +42,7 @@
 }
 
 .footer-title {
-  font-size: 1.1rem;
+  font-size: 1.3rem;
   font-weight: 600;
   color: #ffffff;
   margin-bottom: 20px;
@@ -63,7 +63,7 @@
   color: #b3b3b3;
   text-decoration: none;
   transition: color 0.3s ease;
-  font-size: 0.95rem;
+  font-size: 1.05rem;
 }
 
 .footer-link:hover {
@@ -82,7 +82,7 @@
   align-items: center;
   gap: 12px;
   color: #b3b3b3;
-  font-size: 0.95rem;
+  font-size: 1.05rem;
 }
 
 .contact-icon {
@@ -140,7 +140,7 @@
 
 .copyright {
   color: #666666;
-  font-size: 0.9rem;
+  font-size: 1rem;
   margin: 0;
 }
 

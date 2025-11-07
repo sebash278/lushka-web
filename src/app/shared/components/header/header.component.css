@@ -1,4 +1,4 @@
-/* Color Variables */
+/* Variables de color */
 .header {
   position: fixed;
   top: 0;
@@ -18,12 +18,12 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 80px;
+  height: 100px;
   width: 100%;
   overflow: hidden;
 }
 
-/* Navigation and Cart Container - positioned to the right */
+/* Contenedor de navegación y carrito - posicionado a la derecha */
 .header .nav-cart-container {
   display: flex;
   align-items: center;
@@ -39,8 +39,8 @@
 }
 
 .header .logo .logo-link .logo-icon {
-  width: 60px;
-  height: 60px;
+  width: 80px;
+  height: 80px;
   border-radius: 50%;
   object-fit: contain;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -52,7 +52,7 @@
   box-shadow: 0 4px 15px rgba(154, 31, 58, 0.3);
 }
 
-/* Navigation */
+/* Navegación */
 .header .nav-bar .nav-list {
   display: flex;
   list-style: none;
@@ -65,7 +65,7 @@
   text-decoration: none;
   color: #941F3A;
   font-weight: 500;
-  font-size: 1.2rem;
+  font-size: 1.3rem; /* Aumentado desde 1.2rem */
   transition: color 0.3s ease;
   position: relative;
 }
@@ -78,13 +78,13 @@
   color: #EF326A;
 }
 
-/* Active state for scroll-based highlighting */
+/* Estado activo para resaltado basado en scroll */
 .header .nav-bar .nav-list .nav-item.active .nav-link {
   color: #EF326A;
   font-weight: 600;
 }
 
-/* Scroll Indicator Line */
+/* Línea indicadora de scroll */
 .header .scroll-indicator {
   position: absolute;
   bottom: 0;
@@ -105,10 +105,31 @@
   transition: left 0.3s ease, opacity 0.3s ease;
 }
 
-/* Cart */
-.header .cart-section .cart-link {
+/* Carrito - Anular todos los estilos de botones */
+.header .cart-section .cart-link,
+.cart-link {
+  background: transparent !important;
+  border: none !important;
   text-decoration: none;
   color: #761732;
+  cursor: pointer;
+  padding: 0 !important;
+  margin: 0 !important;
+  font-family: 'Alegreya Sans', sans-serif !important;
+  font-size: inherit;
+  box-shadow: none !important;
+  outline: none !important;
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  -webkit-box-shadow: none !important;
+  -moz-box-shadow: none !important;
+}
+
+.header .cart-section .cart-link:focus,
+.cart-link:focus {
+  outline: none !important;
+  box-shadow: none !important;
 }
 
 .header .cart-section .cart-link .cart-icon {
@@ -149,7 +170,7 @@
   font-weight: bold;
 }
 
-/* Responsive Design */
+/* Diseño responsivo */
 @media (max-width: 768px) {
   .header .header-container {
     padding: 1rem 1.5rem;

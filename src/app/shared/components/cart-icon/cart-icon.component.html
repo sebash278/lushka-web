@@ -1,0 +1,6 @@
+<button class="cart-icon-btn" (click)="openCart()" aria-label="Shopping cart">
+  <i class="fas fa-shopping-bag cart-icon"></i>
+  @if (cartItemCount() > 0) {
+    <span class="cart-badge">{{ cartItemCount() }}</span>
+  }
+</button>

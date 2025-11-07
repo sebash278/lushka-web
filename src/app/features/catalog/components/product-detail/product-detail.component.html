@@ -1,0 +1,155 @@
+<div class="product-detail-container">
+  @if (loading) {
+    <div class="loading-container">
+      <div class="loading-spinner"></div>
+      <p>Cargando producto...</p>
+    </div>
+  } @else if (product) {
+    <div class="product-detail">
+      <!-- Breadcrumb Navigation -->
+      <nav class="breadcrumb">
+        <button (click)="goBack()" class="back-button">
+          <i class="fas fa-arrow-left"></i>
+          Volver al catálogo
+        </button>
+      </nav>
+
+      <div class="product-content">
+        <!-- Product Images Section -->
+        <div class="product-images">
+          <div class="main-image">
+            <img [src]="selectedImage" [alt]="product.name" />
+            @if (product.featured) {
+              <div class="featured-badge">
+                <i class="fas fa-star"></i>
+                Destacado
+              </div>
+            }
+          </div>
+
+          @if (product.images.length > 1) {
+            <div class="image-thumbnails">
+              @for (image of product.images; track image) {
+                <button
+                  class="thumbnail"
+                  [class.active]="selectedImage === image"
+                  (click)="selectImage(image)"
+                >
+                  <img [src]="image" [alt]="`${product.name} thumbnail`" />
+                </button>
+              }
+            </div>
+          }
+        </div>
+
+        <!-- Product Information Section -->
+        <div class="product-info">
+          <div class="product-header">
+            <h1 class="product-name">{{ product.name }}</h1>
+            <div class="product-meta">
+              <span class="category">{{ product.category }}</span>
+              <span class="sku">SKU: {{ product.sku }}</span>
+            </div>
+          </div>
+
+          <div class="product-price">
+            <span class="current-price">{{ formatPrice(product.price) }}</span>
+            @if (product.discount) {
+              <span class="original-price">{{ formatPrice(product.price * (1 + product.discount.percentage / 100)) }}</span>
+              <span class="discount-badge">-{{ product.discount.percentage }}%</span>
+            }
+          </div>
+
+          <div class="stock-status">
+            <span class="stock-indicator {{ getStockStatusClass() }}">
+              <i class="fas fa-circle"></i>
+              {{ getStockStatus() }}
+            </span>
+          </div>
+
+          <div class="product-description">
+            <h3>Descripción</h3>
+            <p>{{ product.description }}</p>
+          </div>
+
+          @if (product.tags && product.tags.length > 0) {
+            <div class="product-tags">
+              <h3>Características</h3>
+              <div class="tags">
+                @for (tag of product.tags; track tag) {
+                  <span class="tag">{{ tag }}</span>
+                }
+              </div>
+            </div>
+          }
+
+          <!-- Purchase Section -->
+          <div class="purchase-section">
+            <div class="quantity-selector">
+              <label for="quantity">Cantidad:</label>
+              <div class="quantity-controls">
+                <button
+                  class="quantity-btn"
+                  [disabled]="quantity <= 1"
+                  (click)="decreaseQuantity()"
+                >
+                  <i class="fas fa-minus"></i>
+                </button>
+                <input
+                  id="quantity"
+                  type="number"
+                  [(ngModel)]="quantity"
+                  min="1"
+                  [max]="product.stock"
+                  class="quantity-input"
+                />
+                <button
+                  class="quantity-btn"
+                  [disabled]="quantity >= product.stock"
+                  (click)="increaseQuantity()"
+                >
+                  <i class="fas fa-plus"></i>
+                </button>
+              </div>
+            </div>
+
+            <div class="action-buttons">
+              <button
+                class="add-to-cart-btn"
+                [disabled]="product.stock === 0"
+                (click)="addToCart()"
+              >
+                <i class="fas fa-shopping-cart"></i>
+                Agregar al carrito
+              </button>
+            </div>
+
+            <div class="product-actions-info">
+              <div class="action-info-item">
+                <i class="fas fa-truck"></i>
+                <span>Envío gratis en pedidos mayores a $50.000</span>
+              </div>
+              <div class="action-info-item">
+                <i class="fas fa-undo"></i>
+                <span>Devolución gratuita en 30 días</span>
+              </div>
+              <div class="action-info-item">
+                <i class="fas fa-shield-alt"></i>
+                <span>Garantía de satisfacción</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  } @else {
+    <div class="product-not-found">
+      <i class="fas fa-exclamation-triangle"></i>
+      <h2>Producto no encontrado</h2>
+      <p>El producto que buscas no existe o ha sido removido.</p>
+      <button (click)="goBack()" class="back-to-catalog-btn">
+        Volver al catálogo
+      </button>
+    </div>
+  }
+</div>

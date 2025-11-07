@@ -13,34 +13,32 @@ export class FooterComponent {
 
   quickLinks = [
     { label: 'Inicio', path: '/' },
-    { label: 'Productos', path: '/products' },
-    { label: 'Sobre Nosotros', path: '/about' },
-    { label: 'Contacto', path: '/contact' }
+    { label: 'Catálogo', path: '/catalog' },
+    { label: 'LushkAI', fragment: 'lushkai' },
+    { label: 'Contacto', fragment: 'contact' }
   ];
 
   contactInfo = {
-    phone: '+57 300 123 4567',
-    email: 'contacto@lushka.com',
-    address: 'Calle 123 #45-67, Bogotá, Colombia'
+    phone: '+57 314 3638924'
   };
 
   socialLinks = [
     {
-      name: 'Facebook',
-      icon: 'fab fa-facebook-f',
-      url: 'https://facebook.com/lushka',
-      bgColor: 'bg-blue-600'
+      name: 'TikTok',
+      icon: 'fab fa-tiktok',
+      url: 'https://www.tiktok.com/@lushka_beauty?is_from_webapp=1&sender_device=pc',
+      bgColor: 'bg-black'
     },
     {
       name: 'Instagram',
       icon: 'fab fa-instagram',
-      url: 'https://instagram.com/lushka',
+      url: 'https://www.instagram.com/lushka_beauty/',
       bgColor: 'bg-pink-600'
     },
     {
       name: 'WhatsApp',
       icon: 'fab fa-whatsapp',
-      url: 'https://wa.me/573001234567',
+      url: 'https://wa.me/573143638924',
       bgColor: 'bg-green-600'
     }
   ];

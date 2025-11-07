@@ -7,7 +7,7 @@
   justify-content: center;
   position: relative;
   overflow: hidden;
-  padding-top: 80px; /* Account for fixed header */
+  padding-top: 80px; /* Considerar encabezado fijo */
   box-sizing: border-box;
 }
 
@@ -24,7 +24,7 @@
   width: 100%;
 }
 
-/* Carousel Container */
+/* Contenedor del carrusel */
 .carousel-container {
   position: relative;
   width: 100%;
@@ -35,7 +35,7 @@
   overflow: hidden;
 }
 
-/* Slides */
+/* Diapositivas */
 .slide {
   position: absolute;
   width: 100%;
@@ -62,7 +62,7 @@
 }
 
 .hero-title {
-  font-size: 3.5rem;
+  font-size: 4rem; /* Aumentado desde 3.5rem */
   font-weight: bold;
   color: #9A1F3A;
   margin-bottom: 1.5rem;
@@ -75,7 +75,7 @@
 }
 
 .hero-subtitle {
-  font-size: 1.3rem;
+  font-size: 1.5rem; /* Aumentado desde 1.3rem */
   color: #761732;
   margin-bottom: 2.5rem;
   line-height: 1.6;
@@ -83,16 +83,16 @@
   animation: fadeInUp 0.8s ease-out 0.2s backwards;
 }
 
-/* CTA Button */
+/* Botón CTA */
 .cta-button {
   display: inline-block;
   padding: 1.2rem 2.5rem;
-  background: #9A1F3A; /* Darker color for better contrast */
+  background: #9A1F3A; /* Color más oscuro para mejor contraste */
   color: white;
   text-decoration: none;
   border-radius: 50px;
   font-weight: 600;
-  font-size: 1.1rem;
+  font-size: 1.2rem; /* Aumentado desde 1.1rem */
   font-family: 'Alegreya Sans', sans-serif;
   transition: all 0.3s ease;
   box-shadow: 0 4px 15px rgba(154, 31, 58, 0.3);
@@ -101,7 +101,7 @@
 }
 
 .cta-button:hover {
-  background: #EF326A; /* Lighter color on hover */
+  background: #EF326A; /* Color más claro al pasar el cursor */
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(239, 50, 106, 0.4);
   color: white;
@@ -109,7 +109,7 @@
   border-color: #EF326A;
 }
 
-/* Carousel Controls */
+/* Controles del carrusel */
 .carousel-control {
   position: absolute;
   top: 50%;
@@ -141,7 +141,7 @@
   right: 2rem;
 }
 
-/* Carousel Indicators */
+/* Indicadores del carrusel */
 .carousel-indicators {
   position: absolute;
   bottom: 2rem;
@@ -171,7 +171,7 @@
   background: rgba(239, 50, 106, 0.3);
 }
 
-/* Animations */
+/* Animaciones */
 @keyframes fadeInUp {
   from {
     opacity: 0;
@@ -183,11 +183,11 @@
   }
 }
 
-/* Responsive Design */
+/* Diseño responsivo */
 @media (max-width: 768px) {
   .hero {
     min-height: 90vh;
-    padding-top: 80px; /* Account for fixed header */
+    padding-top: 80px; /* Considerar encabezado fijo */
   }
 
   .carousel-container {

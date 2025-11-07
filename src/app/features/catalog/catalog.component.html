@@ -1,0 +1,38 @@
+<div class="catalog-container" style="background: #fefefe;">
+  <!-- Main Category Filters (Top) -->
+  <section class="main-filters-section">
+    <h2 class="section-title">Categorías</h2>
+    <app-category-filters (categorySelected)="onCategoriesChanged($event)"></app-category-filters>
+  </section>
+
+  <!-- Secondary Content Area -->
+  <div class="content-wrapper">
+    <!-- Left Sidebar Filters -->
+    <aside class="sidebar-filters">
+      <app-sidebar-filters
+        [selectedCategories]="selectedCategories"
+        (filtersChanged)="onFiltersChanged($event)">
+      </app-sidebar-filters>
+    </aside>
+
+    <!-- Main Products Area -->
+    <main class="products-section">
+      <div class="products-header">
+        <h2 class="products-title">Productos</h2>
+        @if (selectedCategories.length > 0) {
+          <div class="active-filters">
+            <span>Filtros activos: {{ selectedCategories.join(', ') }}</span>
+          </div>
+        }
+      </div>
+
+      <!-- Products Grid -->
+      <div class="products-grid">
+        <app-product-grid
+          [products]="filteredProducts"
+          [loading]="loading">
+        </app-product-grid>
+      </div>
+    </main>
+  </div>
+</div>

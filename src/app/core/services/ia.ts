@@ -2,8 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { AIQuestion, AIOption, UserAnswer, AIRecommendation, AIState } from '../../shared/models';
 import { Product, Combo, ComboProduct } from '../../shared/models';
-import { ProductService } from '../../shared/services/product.service';
-import { ComboService } from '../../shared/services/combo.service';
+import { ProductLoaderService } from '../../features/catalog/services/product-loader.service';
 import { GeminiAiService } from './gemini-ai.service';
 
 @Injectable({
@@ -21,8 +20,7 @@ export class IAService {
   public aiState$ = this.aiStateSubject.asObservable();
 
   constructor(
-    private productService: ProductService,
-    private comboService: ComboService,
+    private productLoader: ProductLoaderService,
     private geminiAiService: GeminiAiService
   ) {
     this.initializeAI();
@@ -48,10 +46,10 @@ export class IAService {
       currentStep: 2,
       totalSteps: 5,
       options: [
-        { id: 'opt1', text: '$20.000 - $50.000', value: 'budget-low' },
-        { id: 'opt2', text: '$50.000 - $150.000', value: 'budget-medium' },
-        { id: 'opt3', text: '$150.000 - $300.000', value: 'budget-high' },
-        { id: 'opt4', text: '$300.000+', value: 'budget-premium' }
+        { id: 'opt1', text: '$8.000 - $15.000 (Económico)', value: 'budget-low' },
+        { id: 'opt2', text: '$18.000 - $25.000 (Estándar)', value: 'budget-medium' },
+        { id: 'opt3', text: '$30.000 - $42.000 (Premium)', value: 'budget-high' },
+        { id: 'opt4', text: '$42.000+ (Lujo)', value: 'budget-premium' }
       ]
     },
     {
@@ -268,8 +266,8 @@ export class IAService {
     const skinType = answers.find(a => a.questionId === 'q4')?.value;
     const ingredientType = answers.find(a => a.questionId === 'q5')?.value;
 
-    // Obtener productos del servicio centralizado
-    const allProducts = this.productService.getAllProducts();
+    // Obtener productos del servicio centralizado que tienen imágenes válidas
+    const allProducts = this.productLoader.getProductsWithValidImages();
     let recommendedProducts = this.filterProductsByAnswers(allProducts, answers);
 
     // Limitar a máximo 4 productos recomendados
@@ -296,11 +294,11 @@ export class IAService {
     // Filtrar por tipo de producto
     if (productType) {
       const categoryMap: { [key: string]: string[] } = {
-        'skincare': ['Facial'],
-        'makeup': ['Maquillaje'],
-        'haircare': ['Cabello'],
-        'bodycare': ['Corporal'],
-        'labios': ['Labios']
+        'skincare': ['facial'],
+        'makeup': ['facial'], // Facial products include makeup-like items
+        'haircare': ['capilar'],
+        'bodycare': ['corporal'],
+        'combos': ['combos']
       };
 
       const relevantCategories = categoryMap[productType] || [];
@@ -312,10 +310,10 @@ export class IAService {
     // Filtrar por presupuesto
     if (budget) {
       const budgetRanges: { [key: string]: { min: number, max: number } } = {
-        'budget-low': { min: 0, max: 50000 },
-        'budget-medium': { min: 20000, max: 150000 },
-        'budget-high': { min: 50000, max: 300000 },
-        'budget-premium': { min: 100000, max: Infinity }
+        'budget-low': { min: 8000, max: 15000 },
+        'budget-medium': { min: 18000, max: 25000 },
+        'budget-high': { min: 30000, max: 42000 },
+        'budget-premium': { min: 42000, max: Infinity }
       };
 
       const range = budgetRanges[budget];
@@ -362,35 +360,72 @@ export class IAService {
    * Generar combos basados en productos recomendados y respuestas del usuario
    */
   private generateCombos(productType: string | undefined, products: Product[]): Combo[] {
-    const allCombos = this.comboService.getAllCombos();
+    const allCombos = this.productLoader.getProductsWithValidImagesByCategory('combos');
     let recommendedCombos: Combo[] = [];
+
+    // Convert Product objects to Combo objects for compatibility
+    const comboProducts: Combo[] = allCombos.map(product => ({
+      id: product.id,
+      name: product.name,
+      description: product.description,
+      price: product.price,
+      originalPrice: product.discount ? product.price * (1 + product.discount.percentage / 100) : product.price,
+      images: product.images,
+      category: product.category,
+      tags: product.tags,
+      stock: product.stock,
+      featured: product.featured,
+      sku: product.sku,
+      createdAt: product.createdAt,
+      updatedAt: product.updatedAt,
+      discount: product.discount,
+      // For combo products, we'll simulate the products array using tags
+      products: product.tags.map((tag, index) => ({
+        id: `${product.id}_${index}`,
+        quantity: 1,
+        product: {
+          id: `${product.id}_${index}`,
+          name: tag,
+          description: `Producto ${tag} del combo ${product.name}`,
+          price: product.price / product.tags.length,
+          images: product.images,
+          category: product.category,
+          tags: [tag],
+          stock: product.stock,
+          featured: false,
+          sku: `${product.sku}_${index}`,
+          createdAt: product.createdAt,
+          updatedAt: product.updatedAt
+        } as Product
+      }))
+    }));
 
     // Filtrar combos basados en el tipo de producto seleccionado
     if (productType) {
       const categoryMap: { [key: string]: string[] } = {
-        'skincare': ['Skincare', 'Hidratación', 'Anti-Edad'],
-        'makeup': ['Maquillaje'],
-        'haircare': ['Cabello'],
-        'bodycare': ['Corporal'],
-        'labios': ['Labios']
+        'skincare': ['facial'],
+        'makeup': ['facial'],
+        'haircare': ['capilar'],
+        'bodycare': ['corporal'],
+        'combos': ['combos']
       };
 
       const relevantCategories = categoryMap[productType] || [];
-      recommendedCombos = allCombos.filter(combo =>
+      recommendedCombos = comboProducts.filter(combo =>
         relevantCategories.includes(combo.category) ||
         relevantCategories.some(cat => combo.tags.some(tag => tag.toLowerCase().includes(cat.toLowerCase())))
       );
     } else {
       // Si no hay tipo específico, mostrar combos destacados
-      recommendedCombos = this.comboService.getFeaturedCombos();
+      recommendedCombos = comboProducts.filter(combo => combo.featured);
     }
 
-    // Priorizar combos que contienen los productos recomendados
+    // Priorizar combos que coinciden con productos recomendados por categoría
     if (products.length > 0) {
-      const productIds = products.map(p => p.id);
+      const productCategories = [...new Set(products.map(p => p.category))];
       const combosWithScore = recommendedCombos.map(combo => ({
         ...combo,
-        relevanceScore: combo.products.filter(cp => productIds.includes(cp.product.id)).length
+        relevanceScore: productCategories.includes(combo.category) ? 2 : 0
       }));
 
       combosWithScore.sort((a, b) => (b.relevanceScore || 0) - (a.relevanceScore || 0));
@@ -426,10 +461,10 @@ export class IAService {
 
     if (budget) {
       const budgetMap: { [key: string]: string } = {
-        'budget-low': 'rango económico',
-        'budget-medium': 'rango medio',
-        'budget-high': 'rango alto',
-        'budget-premium': 'rango premium'
+        'budget-low': 'rango económico ($8k-$15k)',
+        'budget-medium': 'rango estándar ($18k-$25k)',
+        'budget-high': 'rango premium ($30k-$42k)',
+        'budget-premium': 'rango de lujo ($42k+)'
       };
       reasoning.push(`con presupuesto en el ${budgetMap[budget]}`);
     }

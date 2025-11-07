@@ -15,7 +15,7 @@
               <div class="product-card" (click)="onProductClick(product)">
                 <!-- Product Image -->
                 <div class="product-image-container">
-                  <img [src]="'assets/images/products/' + product.images[0]"
+                  <img [src]="product.images[0]"
                        [alt]="product.name"
                        class="product-image">
                   @if (product.discount) {
@@ -48,6 +48,19 @@
                       <span class="tag">{{ tag }}</span>
                     }
                   </div>
+
+                  <!-- Add to Cart Button -->
+                  <button class="add-to-cart-btn" (click)="addToCart(product, $event)"
+                          [disabled]="product.stock === 0"
+                          title="Agregar al carrito">
+                    @if (product.stock === 0) {
+                      <i class="fas fa-times"></i>
+                      Agotado
+                    } @else {
+                      <i class="fas fa-shopping-cart"></i>
+                      Agregar
+                    }
+                  </button>
                 </div>
               </div>
             }

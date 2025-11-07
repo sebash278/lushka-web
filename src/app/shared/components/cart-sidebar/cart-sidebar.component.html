@@ -1,0 +1,106 @@
+@if (cartService.isCartOpen()) {
+  <div class="cart-overlay" (click)="closeCart()"></div>
+  <div class="cart-sidebar">
+    <!-- Cart Header -->
+    <div class="cart-header">
+      <h2 class="cart-title">
+        <i class="fas fa-shopping-bag"></i>
+        Mi Carrito
+      </h2>
+      <div class="cart-actions">
+        @if (cartItemCount() > 0) {
+          <button class="clear-btn" (click)="clearCart()" title="Vaciar carrito">
+            <i class="fas fa-trash-alt"></i>
+          </button>
+        }
+        <button class="close-btn" (click)="closeCart()" title="Cerrar carrito">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Cart Content -->
+    <div class="cart-content">
+      @if (cartItemCount() === 0) {
+        <div class="empty-cart">
+          <i class="fas fa-shopping-bag empty-icon"></i>
+          <h3>Tu carrito está vacío</h3>
+          <p>¡Agrega algunos productos hermosos para comenzar!</p>
+          <button class="continue-shopping-btn" (click)="closeCart()">
+            Seguir comprando
+          </button>
+        </div>
+      } @else {
+        <div class="cart-items">
+          @for (item of cartItems(); track item.id) {
+            <div class="cart-item">
+              <div class="item-image">
+                <img [src]="getProductImage(item)" [alt]="getProductName(item)" />
+              </div>
+              <div class="item-details">
+                <h4 class="item-name">{{ getProductName(item) }}</h4>
+                <p class="item-price">{{ formatPrice(item.totalPrice || 0) }}</p>
+                              </div>
+              <div class="item-quantity">
+                <div class="quantity-controls">
+                  <button
+                    class="quantity-btn"
+                    [disabled]="item.quantity <= 1"
+                    (click)="updateQuantity(item, -1)"
+                  >
+                    <i class="fas fa-minus"></i>
+                  </button>
+                  <input
+                    type="number"
+                    [value]="item.quantity"
+                    [max]="getMaxQuantity(item)"
+                    min="1"
+                    (input)="updateQuantity(item, $event)"
+                    class="quantity-input"
+                  />
+                  <button
+                    class="quantity-btn"
+                    [disabled]="item.quantity >= getMaxQuantity(item)"
+                    (click)="updateQuantity(item, 1)"
+                  >
+                    <i class="fas fa-plus"></i>
+                  </button>
+                </div>
+                <button
+                  class="remove-btn"
+                  (click)="removeFromCart(item.id)"
+                  title="Eliminar producto"
+                >
+                  <i class="fas fa-trash-alt"></i>
+                </button>
+              </div>
+            </div>
+          }
+        </div>
+      }
+    </div>
+
+    <!-- Cart Footer -->
+    @if (cartItemCount() > 0) {
+      <div class="cart-footer">
+        <div class="cart-summary">
+          <div class="summary-row">
+            <span>Subtotal:</span>
+            <span>{{ formatPrice(cartTotal()) }}</span>
+          </div>
+          <div class="summary-row total">
+            <span>Total:</span>
+            <span>{{ formatPrice(cartTotal()) }}</span>
+          </div>
+        </div>
+
+        <div class="cart-actions-bottom">
+          <button class="whatsapp-btn" (click)="openWhatsApp()">
+            <i class="fab fa-whatsapp"></i>
+            Pedir por WhatsApp
+          </button>
+        </div>
+      </div>
+    }
+  </div>
+}

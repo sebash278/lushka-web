@@ -1,0 +1,138 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+.catalog-container {
+  min-height: 100vh;
+  background: #fefefe;
+  font-family: 'Poppins', sans-serif;
+  padding-top: 100px; /* Considerar encabezado fijo */
+}
+
+/* Sección principal de filtros */
+.main-filters-section {
+  background: white;
+  border-bottom: 1px solid #f0f0f0;
+  padding: 30px 20px;
+}
+
+.section-title {
+  text-align: center;
+  margin: 0 0 30px 0;
+  color: #2c3e50;
+  font-size: 28px;
+  font-weight: 600;
+  letter-spacing: -0.5px;
+}
+
+/* Contenedor de contenido */
+.content-wrapper {
+  display: flex;
+  gap: 20px;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Filtros de barra lateral */
+.sidebar-filters {
+  width: 280px;
+  flex-shrink: 0;
+}
+
+.filters-container {
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 20px;
+}
+
+.filters-title {
+  margin: 0 0 20px 0;
+  color: #333;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+/* Sección de productos */
+.products-section {
+  flex: 1;
+  min-width: 0;
+}
+
+.products-header {
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.products-title {
+  margin: 0 0 10px 0;
+  color: #333;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.active-filters {
+  background: #f5f5f5;
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-size: 14px;
+  color: #666;
+}
+
+/* Cuadrícula de productos */
+.products-grid {
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+  min-height: 400px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.placeholder-text {
+  text-align: center;
+  padding: 60px 20px;
+  color: #666;
+}
+
+.placeholder-text p {
+  margin: 0 0 10px 0;
+  font-size: 16px;
+}
+
+/* Diseño responsivo */
+@media (max-width: 1024px) {
+  .content-wrapper {
+    flex-direction: column;
+  }
+
+  .sidebar-filters {
+    width: 100%;
+  }
+
+  .filters-container {
+    position: static;
+  }
+}
+
+@media (max-width: 768px) {
+  .content-wrapper {
+    padding: 15px;
+    gap: 15px;
+  }
+
+  .main-filters-section {
+    padding: 15px;
+  }
+
+  .section-title {
+    font-size: 20px;
+  }
+
+  .products-title {
+    font-size: 18px;
+  }
+}

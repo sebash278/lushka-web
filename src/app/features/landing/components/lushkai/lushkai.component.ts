@@ -1,8 +1,9 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IAService } from '../../../../core/services/ia';
-import { AIState, AIQuestion, AIRecommendation } from '../../../../shared/models';
-import { CartService } from '../../../../core/services/cart';
+import { ProductLoaderService } from '../../../catalog/services/product-loader.service';
+import { AIState, AIQuestion, AIRecommendation, Product } from '../../../../shared/models';
+import { CartService } from '../../../../shared/services/cart.service';
 
 @Component({
   selector: 'app-lushkai',
@@ -14,6 +15,7 @@ import { CartService } from '../../../../core/services/cart';
 export class LushkaiComponent implements OnInit {
   private iaService = inject(IAService);
   private cartService = inject(CartService);
+  private productLoader = inject(ProductLoaderService);
 
   aiState: AIState | null = null;
   selectedOption: string | null = null;
@@ -44,8 +46,47 @@ export class LushkaiComponent implements OnInit {
   }
 
   addToCart(productId: string): void {
-    // This would need to be connected to actual products
-    console.log('Adding to cart:', productId);
+    const product = this.productLoader.getProductById(productId);
+    if (product) {
+      this.cartService.addToCart(product, 1);
+
+      // Show success feedback
+      const successMessage = document.createElement('div');
+      successMessage.className = 'cart-success-message';
+      successMessage.innerHTML = `
+        <i class="fas fa-check-circle"></i>
+        ${product.name} agregado al carrito
+      `;
+      successMessage.style.cssText = `
+        position: fixed;
+        top: 100px;
+        right: 20px;
+        background: #25D366;
+        color: white;
+        padding: 1rem 1.5rem;
+        border-radius: 50px;
+        box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
+        z-index: 10000;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-family: 'Alegreya Sans', sans-serif;
+        font-weight: 500;
+        animation: slideInRight 0.3s ease;
+      `;
+
+      document.body.appendChild(successMessage);
+
+      // Auto-remove after 3 seconds
+      setTimeout(() => {
+        successMessage.style.animation = 'slideOutRight 0.3s ease';
+        setTimeout(() => {
+          if (document.body.contains(successMessage)) {
+            document.body.removeChild(successMessage);
+          }
+        }, 300);
+      }, 3000);
+    }
   }
 
   getProgress(): number {

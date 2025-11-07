@@ -17,3 +17,19 @@ export interface Product {
   createdAt: Date;
   updatedAt: Date;
 }
+
+export interface PriceRange {
+  id: string;
+  label: string;
+  min: number;
+  max: number;
+}
+
+export interface SidebarProductFilters {
+  priceRanges: PriceRange[];
+  tags: string[];
+  featuredOnly: boolean;
+  productTypes?: string[];
+  hairTypes?: string[];
+  skinTypes?: string[];
+}

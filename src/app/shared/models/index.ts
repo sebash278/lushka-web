@@ -1,6 +1,7 @@
 // Product related models
 export * from './product';
 export * from './combo';
+export * from './category';
 
 // Cart related models
 export * from './cart';

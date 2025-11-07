@@ -12,7 +12,7 @@
         <!-- Contact Methods -->
         <div class="contact-methods">
           @for (method of contactInfo; track method.title) {
-            <div class="contact-method" (click)="method.title === 'WhatsApp' ? openWhatsApp() : openEmail()">
+            <div class="contact-method" (click)="openWhatsApp()">
               <div class="method-icon">{{ method.icon }}</div>
               <div class="method-info">
                 <h3 class="method-title">{{ method.title }}</h3>

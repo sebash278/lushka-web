@@ -48,7 +48,7 @@ export class ProductService {
     );
   }
 
-  // Private methods
+  // Métodos privados
   private initializeProducts(): void {
     this.products = this.getSampleProducts();
     this.productsSubject.next(this.products);

@@ -49,7 +49,7 @@ export class ComboService {
     );
   }
 
-  // Private methods
+  // Métodos privados
   private initializeCombos(): void {
     this.combos = this.getSampleCombos();
     this.combosSubject.next(this.combos);

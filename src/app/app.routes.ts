@@ -7,7 +7,11 @@ export const routes: Routes = [
   },
   {
     path: 'catalog',
-    loadChildren: () => import('./features/catalog/catalog.module').then(m => m.CatalogModule)
+    loadComponent: () => import('./features/catalog/catalog.component').then(c => c.CatalogComponent)
+  },
+  {
+    path: 'catalog/:id',
+    loadComponent: () => import('./features/catalog/components/product-detail/product-detail.component').then(c => c.ProductDetailComponent)
   },
   {
     path: 'checkout',

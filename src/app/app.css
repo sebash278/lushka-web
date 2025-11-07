@@ -1,0 +1,15 @@
+/* Posicionamiento del ícono del carrito */
+app-cart-icon {
+  position: fixed;
+  top: 80px;
+  right: 20px;
+  z-index: 1001;
+}
+
+/* Asegurar que el ícono del carrito esté sobre el contenido */
+@media (max-width: 768px) {
+  app-cart-icon {
+    top: 70px;
+    right: 15px;
+  }
+}

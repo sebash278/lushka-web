@@ -83,7 +83,7 @@
               @for (product of aiState.recommendation.products; track product.id) {
                 <div class="product-card">
                   <div class="product-image">
-                    <img [src]="'/assets/images/products/' + product.images[0]" [alt]="product.name" />
+                    <img [src]="product.images[0]" [alt]="product.name" />
                   </div>
                   <div class="product-info">
                     <h5 class="product-name">{{ product.name }}</h5>
@@ -108,7 +108,7 @@
                 <div class="combo-card">
                   <div class="combo-badge">Ahorra ${{ (combo.originalPrice - combo.price).toLocaleString() }}</div>
                   <div class="combo-image">
-                    <img [src]="'/assets/images/combos/' + combo.images[0]" [alt]="combo.name" />
+                    <img [src]="combo.images[0]" [alt]="combo.name" />
                   </div>
                   <div class="combo-info">
                     <h5 class="combo-name">{{ combo.name }}</h5>

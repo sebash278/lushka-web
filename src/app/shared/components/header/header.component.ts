@@ -1,7 +1,7 @@
-import { Component, inject, AfterViewInit, OnDestroy } from '@angular/core';
+import { Component, inject, AfterViewInit, OnDestroy, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink, RouterLinkActive } from '@angular/router';
-import { CartService } from '../../../core/services/cart';
+import { CartService } from '../../services/cart.service';
 
 @Component({
   selector: 'app-header',
@@ -12,14 +12,8 @@ import { CartService } from '../../../core/services/cart';
 })
 export class HeaderComponent implements AfterViewInit, OnDestroy {
   private cartService = inject(CartService);
-  cartCount: number = 0;
+  cartCount = computed(() => this.cartService.cartItemCount());
   private scrollListener!: () => void;
-
-  constructor() {
-    this.cartService.cart$.subscribe(cart => {
-      this.cartCount = cart.items.length;
-    });
-  }
 
   ngAfterViewInit() {
     this.scrollListener = this.onScroll.bind(this);
@@ -70,5 +64,9 @@ export class HeaderComponent implements AfterViewInit, OnDestroy {
       indicator.style.left = `${left}px`;
       indicator.style.opacity = '1';
     }
+  }
+
+  openCart(): void {
+    this.cartService.openCart();
   }
 }

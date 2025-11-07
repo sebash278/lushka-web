@@ -15,7 +15,7 @@
               <div class="combo-card" (click)="onComboClick(combo)">
                 <!-- Combo Image -->
                 <div class="combo-image-container">
-                  <img [src]="'assets/images/combos/' + combo.images[0]"
+                  <img [src]="combo.images[0]"
                        [alt]="combo.name"
                        class="combo-image">
                   @if (combo.discount) {
@@ -50,11 +50,13 @@
 
                   <!-- Price -->
                   <div class="combo-price">
-                    @if (combo.originalPrice && combo.originalPrice > combo.price) {
-                      <span class="original-price">{{ formatPrice(combo.originalPrice) }}</span>
-                      <span class="discounted-price">{{ formatPrice(combo.price) }}</span>
+                    @if (combo.discount) {
+                      <span class="original-price">{{ formatPrice(combo.price) }}</span>
+                      <span class="discounted-price">
+                        {{ formatPrice(combo.price * (1 - combo.discount.percentage / 100)) }}
+                      </span>
                       <div class="savings-label">
-                        Ahorras {{ formatPrice(combo.originalPrice - combo.price) }}
+                        Ahorras {{ formatPrice(combo.price * combo.discount.percentage / 100) }}
                       </div>
                     } @else {
                       <span class="current-price">{{ formatPrice(combo.price) }}</span>
@@ -67,6 +69,19 @@
                       <span class="tag">{{ tag }}</span>
                     }
                   </div>
+
+                  <!-- Add to Cart Button -->
+                  <button class="add-to-cart-btn" (click)="addToCart(combo, $event)"
+                          [disabled]="combo.stock === 0"
+                          title="Agregar al carrito">
+                    @if (combo.stock === 0) {
+                      <i class="fas fa-times"></i>
+                      Agotado
+                    } @else {
+                      <i class="fas fa-shopping-cart"></i>
+                      Agregar
+                    }
+                  </button>
                 </div>
               </div>
             }

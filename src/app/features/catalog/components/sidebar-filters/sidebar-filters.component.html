@@ -1,0 +1,133 @@
+<div class="sidebar-filters">
+  <div class="filters-header">
+    <h3 class="filters-title">Filtros</h3>
+    @if (hasActiveFilters()) {
+      <button class="clear-filters-btn" (click)="clearAllFilters()">
+        <i class="fas fa-times"></i>
+        Limpiar
+      </button>
+    }
+  </div>
+
+  <!-- Price Range Filter -->
+  <div class="filter-section">
+    <h4 class="filter-section-title">Rango de Precio</h4>
+    <div class="filter-options">
+      @for (range of priceRanges; track range.id) {
+        <label class="filter-option">
+          <input
+            type="checkbox"
+            [checked]="selectedPriceRanges.includes(range.id)"
+            (change)="onPriceRangeChange(range.id, $any($event.target).checked)"
+          >
+          <span class="filter-label">{{ range.label }}</span>
+        </label>
+      }
+    </div>
+  </div>
+
+  <!-- Popular Tags Filter -->
+  <div class="filter-section">
+    <h4 class="filter-section-title">Características</h4>
+    <div class="filter-options">
+      @for (tag of popularTags; track tag.id) {
+        <label class="filter-option">
+          <input
+            type="checkbox"
+            [checked]="selectedTags.includes(tag.id)"
+            (change)="onTagChange(tag.id, $any($event.target).checked)"
+          >
+          <span class="filter-label">{{ tag.label }}</span>
+          <span class="filter-count">({{ tag.count }})</span>
+        </label>
+      }
+    </div>
+  </div>
+
+  <!-- Product Type Filter -->
+  @if (visibleProductTypes.length > 0) {
+    <div class="filter-section">
+      <h4 class="filter-section-title">Tipo de Producto</h4>
+      <div class="filter-options">
+        @for (type of visibleProductTypes; track type.id) {
+          <label class="filter-option">
+            <input
+              type="checkbox"
+              [checked]="selectedProductTypes.includes(type.id)"
+              (change)="onProductTypeChange(type.id, $any($event.target).checked)"
+            >
+            <span class="filter-label">{{ type.label }}</span>
+            <span class="filter-count">({{ type.count }})</span>
+          </label>
+        }
+      </div>
+    </div>
+  }
+
+  <!-- Hair Type Filter -->
+  @if (visibleHairTypes.length > 0) {
+    <div class="filter-section">
+      <h4 class="filter-section-title">Tipo de Cabello</h4>
+      <div class="filter-options">
+        @for (type of visibleHairTypes; track type.id) {
+          <label class="filter-option">
+            <input
+              type="checkbox"
+              [checked]="selectedHairTypes.includes(type.id)"
+              (change)="onHairTypeChange(type.id, $any($event.target).checked)"
+            >
+            <span class="filter-label">{{ type.label }}</span>
+            <span class="filter-count">({{ type.count }})</span>
+          </label>
+        }
+      </div>
+    </div>
+  }
+
+  <!-- Skin Type Filter -->
+  @if (visibleSkinTypes.length > 0) {
+    <div class="filter-section">
+      <h4 class="filter-section-title">Tipo de Piel</h4>
+      <div class="filter-options">
+        @for (type of visibleSkinTypes; track type.id) {
+          <label class="filter-option">
+            <input
+              type="checkbox"
+              [checked]="selectedSkinTypes.includes(type.id)"
+              (change)="onSkinTypeChange(type.id, $any($event.target).checked)"
+            >
+            <span class="filter-label">{{ type.label }}</span>
+            <span class="filter-count">({{ type.count }})</span>
+          </label>
+        }
+      </div>
+    </div>
+  }
+
+  <!-- Special Filters -->
+  <div class="filter-section">
+    <h4 class="filter-section-title">Especial</h4>
+    <div class="filter-options">
+      <label class="filter-option">
+        <input
+          type="checkbox"
+          [checked]="showFeaturedOnly"
+          (change)="onFeaturedChange($any($event.target).checked)"
+        >
+        <span class="filter-label">
+          <i class="fas fa-star"></i>
+          Productos Destacados
+        </span>
+      </label>
+    </div>
+  </div>
+
+  <!-- Filter Summary -->
+  @if (hasActiveFilters()) {
+    <div class="filter-summary">
+      <div class="active-filters-count">
+        {{ selectedPriceRanges.length + selectedTags.length + selectedProductTypes.length + selectedHairTypes.length + selectedSkinTypes.length + (showFeaturedOnly ? 1 : 0) }} filtros activos
+      </div>
+    </div>
+  }
+</div>
