@@ -1,5 +1,4 @@
 /* Font imports */
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
 /* Cart Overlay */
 .cart-overlay {
@@ -204,7 +203,7 @@
   font-size: 0.75rem;
   font-weight: 600;
   align-self: flex-start;
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Alegreya Sans', sans-serif;
 }
 
 .item-quantity {
@@ -261,7 +260,7 @@
   border: none;
   font-weight: 600;
   color: #9A1F3A;
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Alegreya Sans', sans-serif;
 }
 
 .remove-btn {

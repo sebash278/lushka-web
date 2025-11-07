@@ -1,8 +1,7 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
 .product-grid {
   width: 100%;
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Alegreya Sans', sans-serif;
 }
 
 .loading-container {
@@ -202,7 +201,7 @@
   font-weight: 500;
   cursor: pointer;
   transition: all 0.3s ease;
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Alegreya Sans', sans-serif;
 }
 
 .add-to-cart-btn:hover {

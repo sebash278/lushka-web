@@ -1,10 +1,8 @@
 /* Puedes agregar estilos globales a este archivo, y también importar otros archivos de estilos */
 
-/* Importación de fuentes de Google */
-@import url('https://fonts.googleapis.com/css2?family=Alegreya+Sans:wght@300;400;500;600;700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Lisu+Bosa:wght@400;500;600;700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&display=swap');
+/* Optimized font loading - preconnect to Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Alegreya+Sans:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lisu+Bosa:wght@600;700&display=swap');
 
 /* Reinicio global y correcciones de desbordamiento */
 * {
@@ -60,14 +58,14 @@ p, span, div, li, a, button, input, textarea, select {
   font-family: 'Lisu Bosa', serif !important;
 }
 
-/* Los elementos de interfaz deben usar Poppins */
+/* Los elementos de interfaz deben usar Alegreya Sans (fallback font) */
 .btn, .button, .cart-count, .price, .tag {
-  font-family: 'Poppins', sans-serif !important;
+  font-family: 'Alegreya Sans', sans-serif !important;
 }
 
 /* Texto elegante de visualización */
 .display-text, .elegant-text {
-  font-family: 'Playfair Display', serif !important;
+  font-family: 'Lisu Bosa', serif !important;
 }
 
 html, body {
